@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>api-properties</comment>
+	
+	<!-- NAVER SHOP -->
+	<entry key="naver.shop.key">77944ea87424da7ad1d8ff35b4e8423a</entry>
+	<entry key="naver.shop.url"></entry>
+	
+	
+</properties>
