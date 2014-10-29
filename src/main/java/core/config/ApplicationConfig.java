@@ -1,8 +1,12 @@
 package core.config;
 
+import javax.annotation.Resource;
+
 import org.l3cache.dto.ShopItems;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,8 +14,11 @@ import core.search.ApiCaller;
 import core.search.SearchHelper;
 
 @Configuration
+@PropertySource(value = "classpath:api-properties.xml")
 public class ApplicationConfig {
-	
+	@Resource
+	private Environment env;
+
 	@Bean
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
@@ -20,8 +27,8 @@ public class ApplicationConfig {
 	@Bean(name="naverApiCaller")
 	public ApiCaller naverApiCaller(){
 		ApiCaller call = new ApiCaller(restTemplate());
-		call.setApiKey("77944ea87424da7ad1d8ff35b4e8423a");
-		call.setApiUrl("http://openapi.naver.com/search?key={key}&query={query}&display={display}&start={start}&target=shop&sort={sort}");
+		call.setApiKey(env.getRequiredProperty("naver.shop.key"));
+		call.setApiUrl(env.getRequiredProperty("naver.shop.url"));
 		return call;
 	}
 	

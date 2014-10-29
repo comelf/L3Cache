@@ -4,9 +4,11 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 	<context:component-scan base-package="core.config" />
 	<context:component-scan base-package="org.l3cache.search" />
 	<context:component-scan base-package="org.l3cache.web" />
@@ -19,9 +21,10 @@
 	<mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:order="2"
 		p:prefix="/WEB-INF/jsp/"
 		p:suffix=".jsp" />
-
+		
 	<bean id="jsonViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="order" value="1" />
         <property name="mediaTypes">
@@ -34,9 +37,7 @@
                 <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
             </list>
         </property>
-        <property name="ignoreAcceptHeader" value="true" />
         <property name="defaultContentType" value="application/json" />
     </bean>
 	
-	<!-- <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" /> --> 
 </beans>
