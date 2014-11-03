@@ -2,25 +2,28 @@ package org.l3cache.search;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.l3cache.dto.Item;
+import org.l3cache.dto.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import core.search.ApiCaller;
+import core.search.EHCacheService;
+import core.search.QueryValidator;
 import core.search.SearchHelper;
+import core.utils.ResultCode;
 
 @Controller
 @RequestMapping("/search")
@@ -34,6 +37,9 @@ public class SearchController {
 	@Resource(name="naverApiCaller")
 	ApiCaller apiCaller;
 	
+	@Autowired
+	EHCacheService ehCacheService;
+	
 	@RequestMapping(value="/naver/shop", method={RequestMethod.POST, RequestMethod.GET})
 	public void searchWithQuery(@RequestParam(value="query") String query,
 								@RequestParam(value="display") int display,
@@ -41,22 +47,18 @@ public class SearchController {
 								@RequestParam(value="sort", defaultValue="sim") String sort,
 								Model model){
 		
-		long startTime = System.currentTimeMillis();
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("display", display);
-		params.put("start", start);
-		params.put("query", query);
-		params.put("sort", sort);
-		
-		List<Item> list = searchHelper.searchNaverApi(params);
-		
-		if(list!=null && !list.isEmpty()){
-			model.addAttribute(list);
+		if(new QueryValidator().validate(query)){
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("display", display);
+			params.put("start", start);
+			params.put("query", query);
+			params.put("sort", sort);
+				
+			model.addAttribute(searchHelper.searchNaverApi(params));	
+		}else{
+			model.addAttribute(new Response(1));
 		}
-		model.addAttribute("");
-		
-		long endTime = System.currentTimeMillis();
-		log.debug("search query = '{}', time ={}" , query,((endTime - startTime )/1000.0)); 
+
 	}
 	
 	@RequestMapping("/naver/shop/test")
@@ -74,10 +76,48 @@ public class SearchController {
 		params.put("query", query);
 		params.put("sort", "sim");
 		
-		List<Item> list = searchHelper.searchNaverApi(params);
-		model.addAttribute(list);
+		model.addAttribute(searchHelper.searchNaverApi(params));
 		long endTime = System.currentTimeMillis();
 		log.debug("test query = '{}', time ={}" , query,((endTime - startTime )/1000.0)); 
 	}
 	
+	@RequestMapping(value="/naver/shop/cache", method={RequestMethod.POST, RequestMethod.GET})
+	public void searchWithQuery2(@RequestParam(value="query") String query,
+								@RequestParam(value="display") int display,
+								@RequestParam(value="start") int start,
+								@RequestParam(value="sort", defaultValue="sim") String sort,
+								Model model){
+		
+		if(new QueryValidator().validate(query)){
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("display", display);
+			params.put("start", start);
+			params.put("query", query);
+			params.put("sort", sort);
+				
+			model.addAttribute(ehCacheService.getResponse(params));	
+		}else{
+			model.addAttribute(new Response(1));
+		}
+
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ModelAndView illegalArgument(Exception e) 
+	{
+		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR1);
+	}
+	
+	@ExceptionHandler(NullPointerException.class)
+	public ModelAndView nullPoint(Exception e) 
+	{
+		return new ModelAndView("NullPointerException").addObject("result", ResultCode.ERROR2);
+	}
+
+	@RequestMapping("/test")
+	public void test (Model model){
+		log.debug("call");
+		model.addAttribute("result", "OK");
+	}
+
 }
