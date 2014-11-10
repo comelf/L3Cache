@@ -47,7 +47,7 @@ Page  <input type="text" name="start"><br>
 			search : function(query, start){
 				var enQuery = escape(encodeURIComponent(query));
 				var request = new XMLHttpRequest();
-				var path="http://localhost:8080/search/naver/shop/cache";
+				var path="http://10.73.45.133:8080/search/naver/shop/cache";
 				var params="?query='"+enQuery +"&display=20&start="+start+"&sort=sim";
 				
 				
