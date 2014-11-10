@@ -17,6 +17,8 @@ import core.utils.ResultCode;
 @Service
 public class EHCacheService {
 	private static final Logger log = LoggerFactory.getLogger(EHCacheService.class);
+
+	private static final int DISPLAY_COUNT = 20;
 	
 	SearchHelper searchHelper;
 	
@@ -40,31 +42,58 @@ public class EHCacheService {
 		}		
 	}
 	
-	// "start" 변화에 따른 return 값 변경
 	private Response naverApiToResponse(Map<String, Object> params) {
 		int start = (int)params.get("start");
 		ShopItems si = searchHelper.searchNaverApi(params);
+		
+		if(si==null){
+			return new Response(1);
+		}
+		
 		int total = si.getChannel().getTotal();
+		int arrCount = si.getChannel().getItem().size();
+		log.debug("api response count={}, arrSize={})",total,arrCount);
 		
-		Response response = new Response(ResultCode.OK);
-		response.setTotal(total);
-		response.setItemList(si.getChannel().getItem().subList(0, 19));
-		response.setStart(start);
+		if(total==0){
+			return new Response(1);
+		}else if(total<=20){
+			Response response = new Response(ResultCode.OK);
+			response.setTotal(total);
+			response.setItemList(si.getChannel().getItem().subList(0, total));
+			response.setStart(start);
+			
+			apiCache(si, params, start, total);
+			return response;
+		}else{
+			Response response = new Response(ResultCode.OK);
+			response.setTotal(total);
+			response.setItemList(si.getChannel().getItem().subList(0, DISPLAY_COUNT));
+			response.setStart(start);
+			log.debug("arrSize={})",response.getItemList().size());
+			apiCache(si, params, start, total);
+			return response;
+		}
 		
-		apiCache(si, params, start);
-		return response;
 	}
 
 	@Async
-	private void apiCache(ShopItems si, Map<String, Object> params, int start) {
-		for(int i=0; i<5; i++){
-			int pageIdx = i*20;
+	private void apiCache(ShopItems si, Map<String, Object> params, int start, int end) {
+		int totalPage = 0;
+		
+		if(end>100){
+			totalPage = 5;
+		}else{
+			totalPage = end / DISPLAY_COUNT;
+		}
+		
+		for(int i=0; i<totalPage; i++){
+			int pageIdx = i*DISPLAY_COUNT;
 			int realStart = start + i;
 			int total = si.getChannel().getTotal();
 			
 			Response response = new Response(ResultCode.OK);
 			response.setTotal(total);
-			response.setItemList(si.getChannel().getItem().subList(pageIdx, pageIdx + 19));
+			response.setItemList(si.getChannel().getItem().subList(pageIdx, pageIdx + DISPLAY_COUNT));
 			response.setStart(realStart);
 			
 			String key = makeKey((String) params.get("query"), realStart, (String)params.get("sort"));

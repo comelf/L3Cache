@@ -32,7 +32,6 @@ public class SearchHelper {
 	// 예) 결과값이 없을경우, 일일 쿼리 제한을 넘길경우
 	// return null로 넘기지 말고 에러에 대한것 넘길것!
 	public ShopItems searchNaverApi(Map<String, Object> params) {
-		
 		StreamSource ss =  apiCaller.getStreamSource(params);
 		ShopItems shopItems = (ShopItems) unmarshaller.unmarshal(ss);
 		

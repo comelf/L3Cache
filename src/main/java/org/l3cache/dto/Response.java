@@ -16,8 +16,8 @@ public class Response {
 		return result;
 	}
 
-	public void setResultCode(int resultCode) {
-		this.result = resultCode;
+	public void setResultCode(int result) {
+		this.result = result;
 	}
 
 	public void setTotal(int total) {
