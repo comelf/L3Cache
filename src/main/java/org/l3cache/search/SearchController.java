@@ -40,7 +40,7 @@ public class SearchController {
 	@Autowired
 	EHCacheService ehCacheService;
 	
-	@RequestMapping(value="/naver/shop", method={RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value="/shop", method={RequestMethod.POST, RequestMethod.GET})
 	public void searchWithQuery(@RequestParam(value="query") String query,
 								@RequestParam(value="display") int display,
 								@RequestParam(value="start") int start,
@@ -54,7 +54,7 @@ public class SearchController {
 			params.put("query", query);
 			params.put("sort", sort);
 				
-			model.addAttribute(searchHelper.searchNaverApi(params));	
+			model.addAttribute(ehCacheService.getResponse(params));	
 		}else{
 			model.addAttribute(new Response(1));
 		}
