@@ -105,10 +105,10 @@ public class ApplicationConfig {
 
 	@Bean
 	public CommonsMultipartResolver multipartResolver() {
-	    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-	    resolver.setDefaultEncoding("utf-8");
-	    resolver.setMaxUploadSize(10000);
-	    return resolver;
+	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+	    multipartResolver.setDefaultEncoding("utf-8");
+	    multipartResolver.setMaxUploadSize(100000);
+	    return multipartResolver;
 	}
 	
 	

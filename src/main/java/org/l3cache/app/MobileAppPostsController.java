@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -47,21 +48,29 @@ public class MobileAppPostsController {
 	}
 	
 	@RequestMapping(value="/new", method = {RequestMethod.POST, RequestMethod.GET})
-	public void newPosts(PostDto postDto, Model model, HttpSession session) {
+	public void newPosts(@RequestParam("title") String title,
+			@RequestParam("shopUrl") String shopUrl,
+			@RequestParam("contents") String contents,
+			@RequestParam("image") MultipartFile image,
+			@RequestParam("price") String price,
+			@RequestParam("id") String id,
+			Model model, HttpSession session) {
 		
-		MultipartFile uploadfile = postDto.getImage();
-        if (uploadfile != null) {
-            String fileName = uploadfile.getOriginalFilename();
+		
+        if (image != null) {
+            String fileName = image.getOriginalFilename();
             try {
             	String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
                 File file = new File(uploadPath + fileName);
-                uploadfile.transferTo(file);
+                image.transferTo(file);
                 
                 model.addAttribute("status", "10");
             } catch (IOException e) {
             	model.addAttribute("status", "20");
             } 
-        } 
+        } else {
+        	model.addAttribute("status", "20");
+        }
 	}
 	
 	private PostsResult makeTestData() {
