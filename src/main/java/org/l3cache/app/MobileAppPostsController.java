@@ -1,17 +1,23 @@
 package org.l3cache.app;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.l3cache.dao.PostsResult;
 import org.l3cache.dao.Response;
 import org.l3cache.model.Post;
+import org.l3cache.model.PostDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/app/posts/")
@@ -38,8 +44,25 @@ public class MobileAppPostsController {
 		
 		model.addAttribute(response);
 	}
-
-
+	
+	@RequestMapping("/new")
+	public void newPosts(PostDto postDto, Model model, HttpSession session) {
+		
+		MultipartFile uploadfile = postDto.getImage();
+        if (uploadfile != null) {
+            String fileName = uploadfile.getOriginalFilename();
+            try {
+            	String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+                File file = new File(uploadPath + fileName);
+                uploadfile.transferTo(file);
+                
+                model.addAttribute("status", "10");
+            } catch (IOException e) {
+            	model.addAttribute("status", "20");
+                e.printStackTrace();
+            } 
+        } 
+	}
 	
 	private PostsResult makeTestData() {
 		int maxPosts = 10;

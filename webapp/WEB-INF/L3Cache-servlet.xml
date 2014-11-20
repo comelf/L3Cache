@@ -13,6 +13,7 @@
 	
 	<mvc:annotation-driven />
 	
+	<mvc:resources location="/WEB-INF/postsImages/" mapping="/postsImages/**" />
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**/" />
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />

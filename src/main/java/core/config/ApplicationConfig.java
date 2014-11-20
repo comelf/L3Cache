@@ -1,5 +1,7 @@
 package core.config;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
@@ -8,11 +10,18 @@ import net.sf.ehcache.CacheManager;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.l3cache.dao.ShopItems;
+import org.l3cache.dao.UserDao;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,12 +32,14 @@ import core.search.SearchHelper;
 @Configuration
 @PropertySource(value = "classpath:application-properties.xml")
 @ComponentScan(basePackages = "org.l3cache")
-//@ComponentScan(basePackages = {"core.database","org.l3cache"})
 //@MapperScan(basePackages="org.l3cache.model")
 public class ApplicationConfig {
 	@Resource
 	private Environment env;
 
+	@Autowired
+	private ApplicationContext ac;
+	
 	@Bean
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
@@ -80,24 +91,17 @@ public class ApplicationConfig {
 		return ds;
 	}
 	
-	
-	
-//	@Bean   
-//	public SqlSessionFactory sqlSessionFactory() throws Exception {     
-//		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean(); 
-//		sessionFactory.setDataSource(dataSource());    
-//		return sessionFactory.getObject();   
-//	} 
-//	
-//	@Bean
-//	public SqlSession sqlSession() {
-//		try {
-//			return sqlSessionFactory().openSession();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			return null;
-//		}
-//	}
+	@Bean
+	public SqlSessionFactoryBean sqlSessionFactory() throws IOException {
+		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+		factoryBean.setDataSource(dataSource());
+		factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+		factoryBean.setTypeAliasesPackage("org.l3cache.model");
+		factoryBean.setMapperLocations(ac.getResources("classpath:org/l3cache/dao/UserMapper.xml"));
+		
+		return factoryBean;
+	}
+
 	
 	
 }
