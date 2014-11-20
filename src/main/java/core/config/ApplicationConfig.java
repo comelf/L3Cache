@@ -24,6 +24,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import core.search.ApiCaller;
 import core.search.EHCacheService;
@@ -102,6 +103,13 @@ public class ApplicationConfig {
 		return factoryBean;
 	}
 
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+	    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+	    resolver.setDefaultEncoding("utf-8");
+	    resolver.setMaxUploadSize(10000);
+	    return resolver;
+	}
 	
 	
 }

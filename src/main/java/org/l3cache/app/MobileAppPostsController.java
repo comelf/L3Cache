@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -45,7 +46,7 @@ public class MobileAppPostsController {
 		model.addAttribute(response);
 	}
 	
-	@RequestMapping("/new")
+	@RequestMapping(value="/new", method = {RequestMethod.POST, RequestMethod.GET})
 	public void newPosts(PostDto postDto, Model model, HttpSession session) {
 		
 		MultipartFile uploadfile = postDto.getImage();
@@ -59,7 +60,6 @@ public class MobileAppPostsController {
                 model.addAttribute("status", "10");
             } catch (IOException e) {
             	model.addAttribute("status", "20");
-                e.printStackTrace();
             } 
         } 
 	}
