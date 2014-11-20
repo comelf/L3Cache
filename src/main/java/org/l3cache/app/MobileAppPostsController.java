@@ -71,7 +71,12 @@ public class MobileAppPostsController {
         } else {
         	model.addAttribute("status", "20");
         }
-        return "";
+        return "redirect:/app/posts/up";
+	}
+	
+	@RequestMapping("/up")
+	public void up(Model model) {
+		 model.addAttribute("status", "10");
 	}
 	
 	private PostsResult makeTestData() {
