@@ -47,8 +47,8 @@ public class MobileAppPostsController {
 		model.addAttribute(response);
 	}
 	
-	@RequestMapping(value="/new", method = {RequestMethod.POST, RequestMethod.GET})
-	public void newPosts(@RequestParam("title") String title,
+	@RequestMapping(value="/new", method = RequestMethod.POST)
+	public String newPosts(@RequestParam("title") String title,
 			@RequestParam("shopUrl") String shopUrl,
 			@RequestParam("contents") String contents,
 			@RequestParam("image") MultipartFile image,
@@ -71,6 +71,7 @@ public class MobileAppPostsController {
         } else {
         	model.addAttribute("status", "20");
         }
+        return "";
 	}
 	
 	private PostsResult makeTestData() {
