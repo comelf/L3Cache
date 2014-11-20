@@ -1,4 +1,4 @@
-package EHCacheTest;
+package ehCacheTest;
 import java.util.HashMap;
 import java.util.Map;
 

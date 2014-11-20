@@ -5,8 +5,9 @@ import java.util.Map;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
-import org.l3cache.dto.Response;
-import org.l3cache.dto.ShopItems;
+import org.l3cache.dao.Response;
+import org.l3cache.dao.SearchResult;
+import org.l3cache.dao.ShopItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -57,19 +58,16 @@ public class EHCacheService {
 		if(total==0){
 			return new Response(1);
 		}else if(total<=20){
-			Response response = new Response(ResultCode.OK);
-			response.setTotal(total);
-			response.setItemList(si.getChannel().getItem().subList(0, total));
-			response.setStart(start);
+			Response response = new Response(ResultCode.SUCCESS);
+			SearchResult result = new SearchResult(start, total, si.getChannel().getItem().subList(0, total));
+			response.setData(result);
 			
 			apiCache(si, params, start, total);
 			return response;
 		}else{
-			Response response = new Response(ResultCode.OK);
-			response.setTotal(total);
-			response.setItemList(si.getChannel().getItem().subList(0, DISPLAY_COUNT));
-			response.setStart(start);
-			log.debug("arrSize={})",response.getItemList().size());
+			Response response = new Response(ResultCode.SUCCESS);
+			SearchResult result = new SearchResult(start, total, si.getChannel().getItem().subList(0, DISPLAY_COUNT));
+			response.setData(result);
 			apiCache(si, params, start, total);
 			return response;
 		}
@@ -91,10 +89,9 @@ public class EHCacheService {
 			int realStart = start + i;
 			int total = si.getChannel().getTotal();
 			
-			Response response = new Response(ResultCode.OK);
-			response.setTotal(total);
-			response.setItemList(si.getChannel().getItem().subList(pageIdx, pageIdx + DISPLAY_COUNT));
-			response.setStart(realStart);
+			Response response = new Response(ResultCode.SUCCESS);
+			SearchResult result = new SearchResult(realStart, total, si.getChannel().getItem().subList(pageIdx, pageIdx + DISPLAY_COUNT));
+			response.setData(result);
 			
 			String key = makeKey((String) params.get("query"), realStart, (String)params.get("sort"));
 			

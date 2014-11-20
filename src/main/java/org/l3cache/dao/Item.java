@@ -1,4 +1,4 @@
-package org.l3cache.dto;
+package org.l3cache.dao;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

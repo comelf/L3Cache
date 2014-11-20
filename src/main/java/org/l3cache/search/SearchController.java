@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.l3cache.dto.Response;
+import org.l3cache.dao.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,8 @@ public class SearchController {
 			params.put("start", start);
 			params.put("query", query);
 			params.put("sort", sort);
-				
+			
+			log.debug("search query = {}", query);
 			model.addAttribute(ehCacheService.getResponse(params));	
 		}else{
 			model.addAttribute(new Response(1));
@@ -61,7 +62,7 @@ public class SearchController {
 
 	}
 	
-	@RequestMapping("/naver/shop/test")
+	@RequestMapping("/shop/test")
 	public void search(Model model, HttpServletRequest request){
 		
 		String qu = request.getParameter("query");
@@ -81,43 +82,17 @@ public class SearchController {
 		log.debug("test query = '{}', time ={}" , query,((endTime - startTime )/1000.0)); 
 	}
 	
-	@RequestMapping(value="/naver/shop/cache", method={RequestMethod.POST, RequestMethod.GET})
-	public void searchWithQuery2(@RequestParam(value="query") String query,
-								@RequestParam(value="display") int display,
-								@RequestParam(value="start") int start,
-								@RequestParam(value="sort", defaultValue="sim") String sort,
-								Model model){
-		
-		if(new QueryValidator().validate(query)){
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("display", display);
-			params.put("start", start);
-			params.put("query", query);
-			params.put("sort", sort);
-				
-			model.addAttribute(ehCacheService.getResponse(params));	
-		}else{
-			model.addAttribute(new Response(1));
-		}
-
-	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ModelAndView illegalArgument(Exception e) 
 	{
-		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR1);
+		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR);
 	}
 	
 	@ExceptionHandler(NullPointerException.class)
 	public ModelAndView nullPoint(Exception e) 
 	{
-		return new ModelAndView("NullPointerException").addObject("result", ResultCode.ERROR2);
-	}
-
-	@RequestMapping("/test")
-	public void test (Model model){
-		log.debug("call");
-		model.addAttribute("result", "OK");
+		return new ModelAndView("NullPointerException").addObject("result", ResultCode.ERROR);
 	}
 
 }

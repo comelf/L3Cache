@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.xml.transform.stream.StreamSource;
 
-import org.l3cache.dto.ShopItems;
+import org.l3cache.dao.ShopItems;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 public class SearchHelper {

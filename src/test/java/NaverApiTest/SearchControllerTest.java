@@ -1,4 +1,4 @@
-package NaverApiTest;
+package naverApiTest;
 
 import org.junit.Test;
 

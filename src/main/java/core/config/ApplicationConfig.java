@@ -1,12 +1,15 @@
 package core.config;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 
-import org.l3cache.dto.ShopItems;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.l3cache.dao.ShopItems;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -18,7 +21,10 @@ import core.search.EHCacheService;
 import core.search.SearchHelper;
 
 @Configuration
-@PropertySource(value = "classpath:api-properties.xml")
+@PropertySource(value = "classpath:application-properties.xml")
+@ComponentScan(basePackages = "org.l3cache")
+//@ComponentScan(basePackages = {"core.database","org.l3cache"})
+//@MapperScan(basePackages="org.l3cache.model")
 public class ApplicationConfig {
 	@Resource
 	private Environment env;
@@ -62,4 +68,36 @@ public class ApplicationConfig {
 	public EHCacheService ehCacheService(){
 		return new EHCacheService(searchHelper(),cache());
 	}
+	
+	@Bean
+	public DataSource dataSource() {
+		BasicDataSource ds = new BasicDataSource();
+		ds.setDriverClassName(env
+				.getRequiredProperty("database.driverClassName"));
+		ds.setUrl(env.getRequiredProperty("database.url"));
+		ds.setUsername(env.getRequiredProperty("database.username"));
+		ds.setPassword(env.getRequiredProperty("database.password"));
+		return ds;
+	}
+	
+	
+	
+//	@Bean   
+//	public SqlSessionFactory sqlSessionFactory() throws Exception {     
+//		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean(); 
+//		sessionFactory.setDataSource(dataSource());    
+//		return sessionFactory.getObject();   
+//	} 
+//	
+//	@Bean
+//	public SqlSession sqlSession() {
+//		try {
+//			return sqlSessionFactory().openSession();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			return null;
+//		}
+//	}
+	
+	
 }

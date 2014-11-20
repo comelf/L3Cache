@@ -1,4 +1,4 @@
-package NaverApiTest;
+package naverApiTest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.l3cache.dto.ShopItems;
+import org.l3cache.dao.ShopItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
