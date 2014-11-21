@@ -8,8 +8,17 @@ public class User {
 	private String email;
 	private String password;
 
+	public User() {
+		
+	}
+	
 	public User(int userId, String email, String password) {
 		this.userId = userId;
+		this.email = email;
+		this.password = password;
+	}
+	
+	public User(String email, String password){
 		this.email = email;
 		this.password = password;
 	}
@@ -36,5 +45,12 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean matchPassword(User db) {
+		if ( this.password==null) {
+			return false;
+		}
+		return this.password.equals(db.getPassword());
 	}
 }

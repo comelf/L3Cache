@@ -2,15 +2,18 @@ package org.l3cache.app;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.l3cache.dao.PostsResult;
 import org.l3cache.dao.Response;
 import org.l3cache.model.Post;
-import org.l3cache.model.PostDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -57,17 +60,25 @@ public class MobileAppPostsController {
 			Model model, HttpSession session) {
 		
 		
+        
         if (image != null) {
             String fileName = image.getOriginalFilename();
-            try {
-            	String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
-                File file = new File(uploadPath + fileName);
-                image.transferTo(file);
-                
-                model.addAttribute("status", "10");
-            } catch (IOException e) {
+            if(fileName.endsWith(".jpg")||fileName.endsWith(".jpeg")||fileName.endsWith(".png")){
+            	try {
+            		UUID uuid = UUID.randomUUID();       
+                    String uuidString = uuid.toString();
+                	String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+                    File file = new File(uploadPath + fileName);
+                    image.transferTo(file);
+                    
+                    model.addAttribute("status", "10");
+                } catch (IOException e) {
+                	model.addAttribute("status", "20");
+                } 
+            }else{
             	model.addAttribute("status", "20");
-            } 
+            }
+            
         } else {
         	model.addAttribute("status", "20");
         }

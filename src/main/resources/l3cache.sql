@@ -7,4 +7,4 @@ CREATE TABLE L3_USERS (
 	PRIMARY KEY         (userId)
 );
 
-INSERT INTO L3_USERS VALUES(1,'DDDD','pwpw');
+INSERT INTO L3_USERS VALUES(1,'test@test.com','pwpw');

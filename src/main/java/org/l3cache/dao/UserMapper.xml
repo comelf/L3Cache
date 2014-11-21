@@ -3,14 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UserMapper">
-	<select id="findById" resultType="user">
-		select * from L3_USERS where email = #{email}
+	<select id="findByEmail" resultType="user">
+		select email,password from L3_USERS where email = #{email}
 	</select>
 
 	<insert id="create">
 		insert into L3_USERS(email, password) values (#{email},#{password})
 	</insert>
 
+	<delete id="deleteUserByEmail">
+		delete from L3_USERS where email = #{email}
+	</delete>
+	
 <!-- 	<update id="update">
 		update USERS 
 		set password= #{password}, name =#{name}, email = #{email} where userId= #{userId} 
