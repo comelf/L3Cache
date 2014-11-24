@@ -15,7 +15,7 @@
     
     <!-- Mysql Database -->
     <entry key="mysql.driverClassName">com.mysql.jdbc.Driver</entry>
-	<entry key="mysql.url">jdbc:mysql://localhost:3306/l3cache</entry>
+	<entry key="mysql.url">jdbc:mysql://localhost:3306/L3CACHE</entry>
 	<entry key="mysql.username">l3cache</entry>
 	<entry key="mysql.password">l3C@cheDB!</entry>
     
