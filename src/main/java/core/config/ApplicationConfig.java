@@ -1,6 +1,5 @@
 package core.config;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
@@ -12,9 +11,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.l3cache.app.PostManager;
 import org.l3cache.dao.ShopItems;
+import org.l3cache.init.InitDatabase;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +22,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -103,6 +100,7 @@ public class ApplicationConfig {
 		ds.setUrl(env.getRequiredProperty("mysql.url"));
 		ds.setUsername(env.getRequiredProperty("mysql.username"));
 		ds.setPassword(env.getRequiredProperty("mysql.password"));
+		
 		return ds;
 	}
 	
@@ -138,6 +136,9 @@ public class ApplicationConfig {
 		return new FileManager();
 	}
 	
-	
+	@Bean
+	public InitDatabase initDatabase() {
+		return new InitDatabase();
+	}
 	
 }
