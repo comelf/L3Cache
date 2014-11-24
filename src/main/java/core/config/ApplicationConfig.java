@@ -9,6 +9,7 @@ import net.sf.ehcache.CacheManager;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.l3cache.app.PostManager;
 import org.l3cache.dao.ShopItems;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -79,25 +80,34 @@ public class ApplicationConfig {
 		return new EHCacheService(searchHelper(),cache());
 	}
 	
+//	@Bean
+//	public DataSource dataSource() {
+//		BasicDataSource ds = new BasicDataSource();
+//		ds.setDriverClassName(env
+//				.getRequiredProperty("database.driverClassName"));
+//		ds.setUrl(env.getRequiredProperty("database.url"));
+//		ds.setUsername(env.getRequiredProperty("database.username"));
+//		ds.setPassword(env.getRequiredProperty("database.password"));
+//		return ds;
+//	}
+	
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource ds = new BasicDataSource();
 		ds.setDriverClassName(env
-				.getRequiredProperty("database.driverClassName"));
-		ds.setUrl(env.getRequiredProperty("database.url"));
-		ds.setUsername(env.getRequiredProperty("database.username"));
-		ds.setPassword(env.getRequiredProperty("database.password"));
+				.getRequiredProperty("mysql.driverClassName"));
+		ds.setUrl(env.getRequiredProperty("mysql.url"));
+		ds.setUsername(env.getRequiredProperty("mysql.username"));
+		ds.setPassword(env.getRequiredProperty("mysql.password"));
 		return ds;
 	}
+	
 	
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource());
 		factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-		factoryBean.setTypeAliasesPackage("org.l3cache.model");
-		factoryBean.setMapperLocations(ac.getResources("classpath:org/l3cache/dao/UserMapper.xml"));
-		
 		return factoryBean.getObject();
 	}
 
@@ -112,6 +122,11 @@ public class ApplicationConfig {
 	    multipartResolver.setDefaultEncoding("utf-8");
 	    multipartResolver.setMaxUploadSize(100000);
 	    return multipartResolver;
+	}
+	
+	@Bean
+	public PostManager postManager() throws Exception {
+		return new PostManager(sqlSession());
 	}
 	
 	

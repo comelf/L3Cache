@@ -47,10 +47,13 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean matchPassword(User db) {
+	public boolean matchPassword(String matcher) {
 		if ( this.password==null) {
 			return false;
 		}
-		return this.password.equals(db.getPassword());
+		if (matcher == null) {
+			return false;
+		}
+		return this.password.equals(matcher);
 	}
 }

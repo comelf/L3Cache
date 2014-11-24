@@ -7,9 +7,16 @@
 	<entry key="naver.shop.key">77944ea87424da7ad1d8ff35b4e8423a</entry>
 	<entry key="naver.shop.url"><![CDATA[http://openapi.naver.com/search?key={key}&query={query}&display={display}&start={start}&target=shop&sort={sort}]]></entry>
 	
-	<!-- Database -->
+	<!-- H2 Database -->
     <entry key="database.driverClassName">org.h2.Driver</entry>
     <entry key="database.url">jdbc:h2:~/l3cache</entry>
     <entry key="database.username">l3cache</entry>
     <entry key="database.password">l3c@che</entry>
+    
+    <!-- Mysql Database -->
+    <entry key="mysql.driverClassName">com.mysql.jdbc.Driver</entry>
+	<entry key="mysql.url">jdbc:mysql://localhost:3306/l3cache</entry>
+	<entry key="mysql.username">l3cache</entry>
+	<entry key="mysql.password">l3C@cheDB!</entry>
+    
 </properties>

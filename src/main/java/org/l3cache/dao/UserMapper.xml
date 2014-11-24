@@ -7,6 +7,10 @@
 		select email,password from L3_USERS where email = #{email}
 	</select>
 
+	<select id="findPassword" resultType="string">
+		select password(#{password})
+	</select>
+
 	<insert id="create">
 		insert into L3_USERS(email, password) values (#{email},#{password})
 	</insert>
@@ -14,6 +18,8 @@
 	<delete id="deleteUserByEmail">
 		delete from L3_USERS where email = #{email}
 	</delete>
+	
+	
 	
 <!-- 	<update id="update">
 		update USERS 

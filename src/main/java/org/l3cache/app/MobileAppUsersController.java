@@ -34,6 +34,7 @@ public class MobileAppUsersController {
 				model.addAttribute("status", ResultCode.SUCCESS);
 			}else{
 				model.addAttribute("status", ResultCode.ERROR);
+				log.debug("유저 가입 오류 : email = {}, returnCode = {}",email, returnCode);
 			}
 		}else{
 			model.addAttribute("status", ResultCode.EMAIL_DUPLICTION);
@@ -45,10 +46,10 @@ public class MobileAppUsersController {
 	public void userLogin(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
 		
-		User user = new User(email, password);
-		User dbUser = sqlSession.selectOne("UserMapper.findByEmail", email);
+		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
+		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		
-		if(user.matchPassword(dbUser)){
+		if(user.matchPassword(matchPass)){
 			model.addAttribute("status", ResultCode.SUCCESS);
 		}else{
 			model.addAttribute("status", ResultCode.PASSWORD_ERROR);
@@ -58,18 +59,19 @@ public class MobileAppUsersController {
 	@RequestMapping(value="/{uid}", method = {RequestMethod.DELETE, RequestMethod.GET})
 	public void deleteUser(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
-		User user = new User(email, password);
-		User dbUser = sqlSession.selectOne("UserMapper.findByEmail", email);
 		
-		if(dbUser == null)
+		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
+		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
+		if(user == null)
 			model.addAttribute("status", ResultCode.EMAIL_ERROR);
 					
-		if(user.matchPassword(dbUser)){
+		if(user.matchPassword(matchPass)){
 			int returnCode = sqlSession.delete("UserMapper.deleteUserByEmail", email);
 			if(returnCode==1){
 				model.addAttribute("status", ResultCode.SUCCESS);
 			}else{
 				model.addAttribute("status", ResultCode.ERROR);
+				log.debug("유저 탈퇴 오류 : email = {}, returnCode = {}",email, returnCode);
 			}
 		}else{
 			model.addAttribute("status", ResultCode.PASSWORD_ERROR);

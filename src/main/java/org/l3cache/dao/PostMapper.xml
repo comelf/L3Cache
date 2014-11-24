@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostMapper">
+	<select id="selectRecentlyList" resultType="post">
+		select 	p.post_id as pid, 
+				p.title as title, 
+				p.shopUrl as shopUrl,
+				p.contents as contents,
+				p.imgUrl as imgUrl, 
+				p.price as price, 
+				p.writeDate as writeDate, 
+				p.write_user_id as writer, 
+				p.read as readCount, 
+				count(L.L3_POSTS_post_id) AS numLike 
+		from L3_POSTS AS p
+			LEFT JOIN LIKE_POSTS AS l 
+			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by p.writeDate DESC LIMIT #{start},20;
+	</select>
+	
+	<insert id="create">
+		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer});
+	</insert>
+	
+	<select id="selectOnePost" resultType="post">
+		select 	p.post_id as pid, 
+				p.title as title, 
+				p.shopUrl as shopUrl,
+				p.contents as contents,
+				p.imgUrl as imgUrl, 
+				p.price as price, 
+				p.writeDate as writeDate, 
+				p.write_user_id as writer, 
+				p.read as readCount, 
+				count(L.L3_POSTS_post_id) AS numLike 
+		from L3_POSTS AS p
+			LEFT JOIN LIKE_POSTS AS l 
+			ON P.post_id = L.L3_POSTS_post_id where p.post_id=#{pid};
+	</select>
+	
+
+</mapper>
