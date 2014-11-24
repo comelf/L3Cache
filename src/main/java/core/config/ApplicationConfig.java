@@ -29,6 +29,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import core.search.ApiCaller;
 import core.search.EHCacheService;
 import core.search.SearchHelper;
+import core.utils.FileManager;
 
 @Configuration
 @PropertySource(value = "classpath:application-properties.xml")
@@ -129,5 +130,9 @@ public class ApplicationConfig {
 		return new PostManager(sqlSession());
 	}
 	
+	@Bean
+	public FileManager fileManager() {
+		return new FileManager();
+	}
 	
 }

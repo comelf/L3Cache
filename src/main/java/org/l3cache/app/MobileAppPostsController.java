@@ -45,20 +45,20 @@ public class MobileAppPostsController {
 		}
 	}
 	
-	@RequestMapping("/")
-	public void userBasePostsList(@RequestParam("email") String email,
-								@RequestParam("start") int start,
-								@RequestParam("sort") int sort,
-								Model model) {
-		try{
-			Response response = new Response(ResultCode.SUCCESS);
-			response.setData(postManager.getRecentlyLists(start));
-			model.addAttribute(response);
-		}catch (Exception e){
-			model.addAttribute(new Response(ResultCode.ERROR));
-			log.debug("포스트 리스트 출력 오류 = {}",e.toString());
-		}
-	}
+//	@RequestMapping("/")
+//	public void userBasePostsList(@RequestParam("email") String email,
+//								@RequestParam("start") int start,
+//								@RequestParam("sort") int sort,
+//								Model model) {
+//		try{
+//			Response response = new Response(ResultCode.SUCCESS);
+//			response.setData(postManager.getRecentlyLists(start));
+//			model.addAttribute(response);
+//		}catch (Exception e){
+//			model.addAttribute(new Response(ResultCode.ERROR));
+//			log.debug("포스트 리스트 출력 오류 = {}",e.toString());
+//		}
+//	}
 	
 	
 	@RequestMapping("/{pid}")
