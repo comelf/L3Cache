@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.l3cache.model.Post;
 import org.l3cache.model.PostId;
+import org.l3cache.model.PostSe;
 import org.l3cache.model.WritePost;
 
 public class PostManager {
@@ -17,9 +18,10 @@ public class PostManager {
 		this.sqlSession = sqlSession;
 	}
 
-	public List<Post> getRecentlyLists(int start) {
-		start = (start - 1) * 20;
-		return sqlSession.selectList("PostMapper.selectRecentlyList", start);
+	public List<Post> getRecentlyLists(int start, int uid) {
+		
+		PostSe postSe = new PostSe(start, uid);
+		return sqlSession.selectList("PostMapper.selectRecentlyList", postSe);
 	}
 
 	public Post getPostDetail(long pid) {

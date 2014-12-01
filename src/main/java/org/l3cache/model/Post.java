@@ -16,7 +16,7 @@ public class Post {
 	private String writer;
 	private int read;
 	private int numLike;
-	private int like;
+	private int userLike;
 	
 	public Post(String title, String shopUrl, String contents, String imgUrl,
 			String price, String id) {
@@ -139,11 +139,11 @@ public class Post {
 	}
 
 	public int getLike() {
-		return like;
+		return userLike;
 	}
 
-	public void setLike(int like) {
-		this.like = like;
+	public void setLike(int userLike) {
+		this.userLike = userLike;
 	}
 
 	public int getRead() {

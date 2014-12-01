@@ -9,15 +9,20 @@ public class WritePost {
 	private String contents;
 	private String imgUrl;
 	private String price;
-	private int id;
+	private int writer;
 	
 	public WritePost() {
 		
 	}
 	
 	public WritePost(String title, String shopUrl, String contents,
-			String imgUrl, String price, int id) {
-		// TODO Auto-generated constructor stub
+			String imgUrl, String price, int writer) {
+		this.title = title;
+		this.shopUrl = shopUrl;
+		this.contents = contents;
+		this.imgUrl = imgUrl;
+		this.price = price;
+		this.writer = writer;
 	}
 
 	public String getTitle() {
@@ -61,11 +66,11 @@ public class WritePost {
 	}
 
 	public int getId() {
-		return id;
+		return writer;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int writer) {
+		this.writer = writer;
 	}
 
 	

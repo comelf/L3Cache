@@ -3,7 +3,6 @@ package databaseTest;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.l3cache.model.User;
@@ -23,24 +22,18 @@ import static org.junit.Assert.assertThat;
 public class UserDaoTest {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	SqlSession sqlSession;
 
-	@Autowired
-	private DataSource dataSource;
-	
 	
 	@Test
 	public void matchTest() {
-		SqlSession session = sqlSessionFactory.openSession();
-		
 		String userID = "haha@haha.com";
 		String password = "hahahaha";
 		
-		User result = session.selectOne("UserMapper.findByEmail", userID);
-		String matchPass = session.selectOne("UserMapper.findPassword", password);
+		User result = sqlSession.selectOne("UserMapper.findByEmail", userID);
+		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		
 		assertThat(result.getPassword(), is(matchPass));
-		session.close();
 	}
 
 }

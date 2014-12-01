@@ -13,8 +13,8 @@
 				P.writeDate as writeDate, 
 				U.email as writer, 
 				P.post_read as read, 
-				count(L.L3_POSTS_post_id) AS numLike 
-				sum(if(L.L3_USERS_user_id=5,1,0)) AS 'like'
+				count(L.L3_POSTS_post_id) as numLike 
+				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
 		from L3_POSTS AS P
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
@@ -35,7 +35,7 @@
 				P.price as price, 
 				P.writeDate as writeDate, 
 				U.email as writer, 
-				P.read as readCount, 
+				P.read as read, 
 				count(L.L3_POSTS_post_id) AS numLike 
 		from L3_POSTS AS P
             LEFT JOIN L3_USERS AS U
@@ -47,6 +47,7 @@
 	<update id="updateWithImage">
 		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{pid};
 	</update>
+	
 	<update id="updateWithoutImage">
 		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, price=#{price} where post_id =#{pid};
 	</update>
@@ -64,7 +65,7 @@
 	</delete>
 	
 	<update id="readPost">
-		update L3_POSTS set post_read = post_read + 1 where post_id = #{pid}
+		update L3_POSTS set post_read = post_read + 1 where post_id = #{pid};
 	</update>
 	
 </mapper>

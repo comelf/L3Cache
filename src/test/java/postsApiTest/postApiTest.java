@@ -2,23 +2,27 @@ package postsApiTest;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.ibatis.session.SqlSession;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.l3cache.app.PostManager;
 import org.l3cache.model.Post;
 import org.l3cache.model.WritePost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import core.config.ApplicationConfig;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=ApplicationConfig.class, loader=AnnotationConfigContextLoader.class)
@@ -30,11 +34,21 @@ public class PostApiTest {
 	@Autowired
 	PostManager postManager;
 	
+	@Autowired
+	DataSource dataSource;
+	
+	@Before
+	public void setUp() {
+		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+		populator.addScript(new ClassPathResource("l3cache.sql"));
+		DatabasePopulatorUtils.execute(populator, dataSource);
+	}
+	
 	@Test
 	public void postsListTest() {
 		int start = 1;
 		
-		List<Post> list = postManager.getRecentlyLists(start);
+		List<Post> list = postManager.getRecentlyLists(start,1);
 		
 		assertThat(list, notNullValue());
 		assertThat(list.size(), is(20));

@@ -38,7 +38,7 @@ public class MobileAppPostsController {
 								Model model) {
 		try{
 			Response response = new Response(ResultCode.SUCCESS);
-			response.setData(postManager.getRecentlyLists(start));
+			response.setData(postManager.getRecentlyLists(start, id));
 			model.addAttribute(response);
 		}catch (Exception e){
 			model.addAttribute(new Response(ResultCode.ERROR));
