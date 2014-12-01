@@ -29,7 +29,7 @@ public class MobileAppUsersController {
 	public void newUser(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
 		
-		if(sqlSession.selectOne("UserMapper.findByEmail", email) != null){
+		if(sqlSession.selectOne("UserMapper.findByEmail", email) == null){
 			User user = new User(email, password);
 			int returnCode = sqlSession.insert("UserMapper.create", user);
 			
@@ -47,7 +47,7 @@ public class MobileAppUsersController {
 	
 	@RequestMapping(value="/login", method = {RequestMethod.POST, RequestMethod.GET})
 	public void userLogin(@RequestParam(value = "email") String email,
-			@RequestParam(value = "password") String password, Model model) {
+						@RequestParam(value = "password") String password, Model model) {
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		
