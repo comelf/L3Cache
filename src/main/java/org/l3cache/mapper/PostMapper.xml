@@ -12,8 +12,7 @@
 				P.price as price, 
 				P.writeDate as writeDate, 
 				U.email as writer, 
-				P.post_read as read, 
-				count(L.L3_POSTS_post_id) as numLike 
+				count(L.L3_POSTS_post_id) as numLike,
 				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
 		from L3_POSTS AS P
             LEFT JOIN L3_USERS AS U
