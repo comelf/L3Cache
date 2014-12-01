@@ -49,16 +49,21 @@ public class MobileAppUsersController {
 	public void userLogin(@RequestParam(value = "email") String email,
 						@RequestParam(value = "password") String password, Model model) {
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
-		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
-		
-		if(user.matchPassword(matchPass)){
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("status", String.valueOf(ResultCode.SUCCESS));
-			map.put("id", String.valueOf(user.getUserId()));
-			model.addAllAttributes(map);
+		if(user!=null){
+			String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
+			
+			if(user.matchPassword(matchPass)){
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("status", String.valueOf(ResultCode.SUCCESS));
+				map.put("id", String.valueOf(user.getUserId()));
+				model.addAllAttributes(map);
+			}else{
+				model.addAttribute("status", ResultCode.PASSWORD_ERROR);
+			}
 		}else{
-			model.addAttribute("status", ResultCode.PASSWORD_ERROR);
+			model.addAttribute("status", ResultCode.EMAIL_ERROR);
 		}
+		
 	}
 	
 	@RequestMapping(value="/delete", method = {RequestMethod.DELETE, RequestMethod.GET})
