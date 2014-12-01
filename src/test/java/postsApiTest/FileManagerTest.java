@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
 import core.utils.FileManager;
-import static org.junit.Assert.*;
 
 public class FileManagerTest {
 

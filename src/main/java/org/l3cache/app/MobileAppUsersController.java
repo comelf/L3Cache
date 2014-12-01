@@ -45,7 +45,7 @@ public class MobileAppUsersController {
 		
 	}
 	
-	@RequestMapping(value="/login", method = RequestMethod.GET)
+	@RequestMapping(value="/login", method = {RequestMethod.POST, RequestMethod.GET})
 	public void userLogin(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
