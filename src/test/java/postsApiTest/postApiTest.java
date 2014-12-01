@@ -21,7 +21,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=ApplicationConfig.class, loader=AnnotationConfigContextLoader.class)
-public class postApiTest {
+public class PostApiTest {
 
 	@Autowired
 	SqlSession sqlSession;

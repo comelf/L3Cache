@@ -1,5 +1,8 @@
 package org.l3cache.app;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.l3cache.model.User;
 import org.slf4j.Logger;
@@ -42,21 +45,23 @@ public class MobileAppUsersController {
 		
 	}
 	
-	@RequestMapping(value="/login", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public void userLogin(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
-		
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		
 		if(user.matchPassword(matchPass)){
-			model.addAttribute("status", ResultCode.SUCCESS);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("status", String.valueOf(ResultCode.SUCCESS));
+			map.put("id", String.valueOf(user.getUserId()));
+			model.addAllAttributes(map);
 		}else{
 			model.addAttribute("status", ResultCode.PASSWORD_ERROR);
 		}
 	}
 	
-	@RequestMapping(value="/{uid}", method = {RequestMethod.DELETE, RequestMethod.GET})
+	@RequestMapping(value="/delete", method = {RequestMethod.DELETE, RequestMethod.GET})
 	public void deleteUser(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model) {
 		
@@ -78,5 +83,4 @@ public class MobileAppUsersController {
 		}
 	}
 	
-
 }

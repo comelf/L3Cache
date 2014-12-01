@@ -13,7 +13,7 @@ public class FileManager {
 			String lastName = originName.substring(originName.lastIndexOf("."),originName.length()); 
 			UUID uuid = UUID.randomUUID();
         	String fileName = uuid.toString().replace("-", "");
-        	File file = new File(uploadPath + fileName + lastName);
+        	File file = new File( uploadPath + fileName + lastName);
             image.transferTo(file);
                     
             return fileName;
@@ -31,5 +31,24 @@ public class FileManager {
 			return true;
 		
 	}
+
+		public String saveAndRemoveFile(MultipartFile image, String uploadPath,
+				String beforeFile) throws IllegalStateException, IOException {
+			
+			String originName = image.getOriginalFilename();
+			String lastName = originName.substring(originName.lastIndexOf("."),originName.length()); 
+			UUID uuid = UUID.randomUUID();
+        	String fileName = uuid.toString().replace("-", "");
+        	File file = new File(uploadPath + fileName + lastName);
+            image.transferTo(file);
+            
+            
+			File before = new File(beforeFile);
+            
+            if(before.isFile())
+            	before.delete();
+            
+			return fileName;
+		}
 
 }

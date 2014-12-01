@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpSession;
 
 import org.l3cache.dao.Response;
-import org.l3cache.model.Post;
+import org.l3cache.model.WritePost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +24,18 @@ import core.utils.ResultCode;
 @RequestMapping("/app/posts/")
 public class MobileAppPostsController {
 	private static final Logger log = LoggerFactory.getLogger(MobileAppPostsController.class);
+	private static final String localhost = "http://125.209.199.221:8080";
+	@Autowired
+	private PostManager postManager;
 	
 	@Autowired
-	PostManager postManager;
-	
-	@Autowired
-	FileManager fileManager;
+	private FileManager fileManager;
 	
 	@RequestMapping("/")
-	public void postsList(@RequestParam("start") int start,
-							@RequestParam("sort") int sort,
-							Model model) {
+	public void userBasePostsList(@RequestParam("id") int id,
+								@RequestParam("start") int start,
+								@RequestParam("sort") int sort,
+								Model model) {
 		try{
 			Response response = new Response(ResultCode.SUCCESS);
 			response.setData(postManager.getRecentlyLists(start));
@@ -44,21 +45,6 @@ public class MobileAppPostsController {
 			log.debug("포스트 리스트 출력 오류 = {}",e.toString());
 		}
 	}
-	
-//	@RequestMapping("/")
-//	public void userBasePostsList(@RequestParam("email") String email,
-//								@RequestParam("start") int start,
-//								@RequestParam("sort") int sort,
-//								Model model) {
-//		try{
-//			Response response = new Response(ResultCode.SUCCESS);
-//			response.setData(postManager.getRecentlyLists(start));
-//			model.addAttribute(response);
-//		}catch (Exception e){
-//			model.addAttribute(new Response(ResultCode.ERROR));
-//			log.debug("포스트 리스트 출력 오류 = {}",e.toString());
-//		}
-//	}
 	
 	
 	@RequestMapping("/{pid}")
@@ -75,41 +61,119 @@ public class MobileAppPostsController {
 	}
 	
 	@RequestMapping(value="/new", method = RequestMethod.POST)
-	public String newPosts(@RequestParam("title") String title,
+	public String newPost(@RequestParam("title") String title,
 			@RequestParam("shopUrl") String shopUrl,
 			@RequestParam("contents") String contents,
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("price") String price,
 			@RequestParam("id") int id,
-			Model model, HttpSession session) {
+			HttpSession session) {
 		if (fileManager.isValidatedFile(image)) {
 			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
 			String fileName = "";
 			try {
 				fileName = fileManager.saveFile(image, uploadPath);
 			} catch (IllegalStateException | IOException e) {
-				model.addAttribute(new Response(ResultCode.ERROR));
 				log.debug("파일 저장 오류 = {}",e.toString());
+				return "redirect:/app/posts/error";
 			}
-			Post post = new Post(title,shopUrl,contents,uploadPath+fileName,price,id);
-			
-			if(postManager.savePost(post)==1){
-				model.addAttribute(new Response(ResultCode.SUCCESS));
+			WritePost post = new WritePost(title, shopUrl, contents,localhost+uploadPath+fileName, price, id);
+			if(postManager.savePost(post)){
 				return "redirect:/app/posts/success";
-			}else{
-				model.addAttribute(new Response(ResultCode.ERROR));
 			}
-			
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
 		}
-
-        return "redirect:/app/posts/up";
+		
+		return "redirect:/app/posts/error";
 	}
 	
 	@RequestMapping("/success")
-	public void up(Model model) {
+	public void postSuccess(Model model) {
 		 model.addAttribute("status", "10");
+	}
+	
+	@RequestMapping("/error")
+	public void postError(Model model) {
+		 model.addAttribute("status", "10");
+	}
+	
+	@RequestMapping("/edit/{pid}")
+	public String editPost(@PathVariable("pid") long pid,
+						@RequestParam("title") String title,
+						@RequestParam("shopUrl") String shopUrl,
+						@RequestParam("contents") String contents,
+						@RequestParam("image") MultipartFile image,
+						@RequestParam("price") String price,
+						@RequestParam("id") int id,
+						HttpSession session) {
+		
+		if (fileManager.isValidatedFile(image)) {
+			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+			String fileName = "";
+			try {
+				String beforeFile = postManager.getPostImageFilePath(pid);
+				fileName = fileManager.saveAndRemoveFile(image, uploadPath, beforeFile);
+			} catch (IllegalStateException | IOException e) {
+				log.debug("파일 저장 오류 = {}",e.toString());
+				return "redirect:/app/posts/error";
+			}
+			WritePost post = new WritePost(title, shopUrl, contents, localhost+uploadPath+fileName, price, id);
+			if(postManager.updateWithImage(post)){
+				return "redirect:/app/posts/success";
+			}
+		}else {
+			if(postManager.isExistentPost(pid)){
+				WritePost post = new WritePost(title, shopUrl, contents, "", price, id);
+				if(postManager.updateWithImage(post)){
+					return "redirect:/app/posts/success";
+				}
+			}
+		}
+		
+		return "redirect:/app/posts/error";
+		
+	}
+	
+	@RequestMapping(value="/delete/{pid}", method = {RequestMethod.DELETE,RequestMethod.GET})
+	public void deletePost(@PathVariable("pid") long pid,
+							@RequestParam("uid") int uid,
+							Model model) {
+		if(postManager.deletePost(pid, uid)){
+			model.addAttribute("status", ResultCode.SUCCESS);
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
+	
+	@RequestMapping(value="/like", method = {RequestMethod.POST,RequestMethod.GET})
+	public void likePost(@RequestParam("pid") long pid,
+						@RequestParam("uid") int uid,
+							Model model) {
+		if(postManager.likePost(pid, uid)){
+			model.addAttribute("status", ResultCode.SUCCESS);
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
+	
+	@RequestMapping(value="/like", method = {RequestMethod.DELETE,RequestMethod.GET})
+	public void unlikePost(@RequestParam("pid") long pid,
+							@RequestParam("uid") int uid,
+							Model model) {
+		if(postManager.unlikePost(pid, uid)){
+			model.addAttribute("status", ResultCode.SUCCESS);
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
+	
+	@RequestMapping(value="/{pid}/read", method = {RequestMethod.POST,RequestMethod.GET})
+	public void readPost(@RequestParam("pid") long pid,
+							Model model) {
+		if(postManager.readPost(pid)){
+			model.addAttribute("status", ResultCode.SUCCESS);
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
 	}
 	
 }

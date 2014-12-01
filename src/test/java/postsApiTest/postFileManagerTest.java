@@ -8,7 +8,7 @@ import core.utils.FileManager;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
 
-public class postFileManagerTest {
+public class PostFileManagerTest {
 
 
 	@Test

@@ -13,26 +13,25 @@ public class Post {
 	private String imgUrl;
 	private String price;	
 	private Date writeDate;
-	private int writer;
-	private int readCount;
+	private String writer;
+	private int read;
 	private int numLike;
-	
-	
+	private int like;
 	
 	public Post(String title, String shopUrl, String contents, String imgUrl,
-			String price, int writer) {
+			String price, String id) {
 		super();
 		this.title = title;
 		this.shopUrl = shopUrl;
 		this.contents = contents;
 		this.imgUrl = imgUrl;
 		this.price = price;
-		this.writer = writer;
+		this.writer = id;
 	}
 
 	public Post(int pid, String title, String shopUrl, String contents,
-			String imgUrl, String price, Date writeDate, int writer,
-			int readCount, int numLike) {
+			String imgUrl, String price, Date writeDate, String writer,
+			int read, int numLike) {
 		super();
 		this.pid = pid;
 		this.title = title;
@@ -42,13 +41,14 @@ public class Post {
 		this.price = price;
 		this.writeDate = writeDate;
 		this.writer = writer;
-		this.readCount = readCount;
+		this.read = read;
 		this.numLike = numLike;
 	}
 
 	public Post(){
 		
 	}
+
 
 	public long getPid() {
 		return pid;
@@ -120,22 +120,13 @@ public class Post {
 	}
 
 
-	public int getWriter() {
+	public String getWriter() {
 		return writer;
 	}
 
 
-	public void setWriter(int writer) {
+	public void setWriter(String writer) {
 		this.writer = writer;
-	}
-
-
-	public int getReadCount() {
-		return readCount;
-	}
-
-	public void setReadCount(int readCount) {
-		this.readCount = readCount;
 	}
 
 	public int getNumLike() {
@@ -145,6 +136,22 @@ public class Post {
 
 	public void setNumLike(int numLike) {
 		this.numLike = numLike;
+	}
+
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
+	public int getRead() {
+		return read;
+	}
+
+	public void setRead(int read) {
+		this.read = read;
 	}
 	
 	

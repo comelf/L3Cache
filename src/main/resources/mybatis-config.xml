@@ -8,7 +8,6 @@
 	</typeAliases>
 
  	<mappers>
-		<mapper resource="org/l3cache/dao/UserMapper.xml" />
-		<mapper resource="org/l3cache/dao/PostMapper.xml" />
+ 		<package name="org.l3cache.mapper"/>
 	</mappers>
 </configuration>

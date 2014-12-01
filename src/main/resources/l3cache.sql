@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `L3CACHE`.`L3_POSTS` (
   CONSTRAINT `fk_L3_POSTS_L3_USERS1`
     FOREIGN KEY (`write_user_id`)
     REFERENCES `L3CACHE`.`L3_USERS` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -64,13 +64,13 @@ CREATE TABLE IF NOT EXISTS `L3CACHE`.`LIKE_POSTS` (
   CONSTRAINT `fk_L3_USERS_has_L3_POSTS_L3_USERS`
     FOREIGN KEY (`L3_USERS_user_id`)
     REFERENCES `L3CACHE`.`L3_USERS` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_L3_USERS_has_L3_POSTS_L3_POSTS1`
     FOREIGN KEY (`L3_POSTS_post_id`)
     REFERENCES `L3CACHE`.`L3_POSTS` (`post_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -82,7 +82,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 --test data
 
 
-insert into L3_USERS (email,password) values ('abc@def.com',password('testtest'));
+insert into L3_USERS (email,password) values ('test@test.com',password('test'));
 insert into L3_USERS (email,password) values ('haha@haha.com',password('hahahaha'));
 insert into L3_USERS (email,password) values ('gaga@naver.com',password('qwerqwgs'));
 insert into L3_USERS (email,password) values ('asdfasdf@gmail.com',password('t134yrg1'));
