@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.l3cache.app.PostManager;
 import org.l3cache.model.Post;
+import org.l3cache.model.WritePost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -59,7 +60,7 @@ public class PostApiTest {
 		String price = "100";
 		int writer = 1;
 		
-		Post newPost = new Post(title,shopUrl,contents,imgUrl,price,writer);
+		WritePost newPost = new WritePost(title,shopUrl,contents,imgUrl,price,writer);
 		int result = sqlSession.insert("PostMapper.create", newPost);
 		
 		assertThat(result, is(1));
