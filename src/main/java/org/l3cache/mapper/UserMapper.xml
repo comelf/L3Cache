@@ -12,7 +12,7 @@
 	</select>
 
 	<insert id="create">
-		insert into L3_USERS(email, password) values (#{email},#{password})
+		insert into L3_USERS(email, password) values (#{email},password(#{password}))
 	</insert>
 
 	<delete id="deleteUserByEmail">
