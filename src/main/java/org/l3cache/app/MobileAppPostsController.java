@@ -60,7 +60,7 @@ public class MobileAppPostsController {
 		}
 	}
 	
-	@RequestMapping(value="/new", method = RequestMethod.POST)
+	@RequestMapping(value="/new")
 	public String newPost(@RequestParam("title") String title,
 			@RequestParam("shopUrl") String shopUrl,
 			@RequestParam("contents") String contents,
