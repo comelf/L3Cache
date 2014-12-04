@@ -17,7 +17,7 @@ public class PostManager {
 	}
 
 	public List<Post> getRecentlyLists(int start, int uid) {
-
+		start = (start -1) * 20;
 		PostSe postSe = new PostSe(start, uid);
 		return sqlSession.selectList("PostMapper.selectRecentlyList", postSe);
 	}
