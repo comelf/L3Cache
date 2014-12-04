@@ -21,7 +21,7 @@ import core.utils.FileManager;
 import core.utils.ResultCode;
 
 @Controller
-@RequestMapping("/app/posts/")
+@RequestMapping("/app/posts")
 public class MobileAppPostsController {
 	private static final Logger log = LoggerFactory.getLogger(MobileAppPostsController.class);
 	private static final String localhost = "http://125.209.199.221:8080";
@@ -68,6 +68,8 @@ public class MobileAppPostsController {
 			@RequestParam("price") String price,
 			@RequestParam("id") int id,
 			HttpSession session) {
+		log.debug("포스트 업로드 요청");
+		
 		if (fileManager.isValidatedFile(image)) {
 			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
 			String fileName = "";
@@ -86,14 +88,31 @@ public class MobileAppPostsController {
 		return "redirect:/app/posts/error";
 	}
 	
+	@RequestMapping(value="/newurl")
+	public void newPostWithUrl(@RequestParam("title") String title,
+			@RequestParam("shopUrl") String shopUrl,
+			@RequestParam("contents") String contents,
+			@RequestParam("image") String imageUrl,
+			@RequestParam("price") String price,
+			@RequestParam("id") int id,
+			Model model) {
+		log.debug("포스트 업로드 요청 with ImgURL");
+		
+		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
+		if(postManager.savePost(post)){
+			model.addAttribute("status", ResultCode.SUCCESS);
+		}
+		model.addAttribute("status", ResultCode.ERROR);
+	}
+	
 	@RequestMapping("/success")
 	public void postSuccess(Model model) {
-		 model.addAttribute("status", "10");
+		 model.addAttribute("status", ResultCode.SUCCESS);
 	}
 	
 	@RequestMapping("/error")
 	public void postError(Model model) {
-		 model.addAttribute("status", "10");
+		 model.addAttribute("status", ResultCode.ERROR);
 	}
 	
 	@RequestMapping("/edit/{pid}")
