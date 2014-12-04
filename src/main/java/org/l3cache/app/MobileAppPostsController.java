@@ -101,8 +101,9 @@ public class MobileAppPostsController {
 		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
 		if(postManager.savePost(post)){
 			model.addAttribute("status", ResultCode.SUCCESS);
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
 		}
-		model.addAttribute("status", ResultCode.ERROR);
 	}
 	
 	@RequestMapping("/success")

@@ -72,9 +72,9 @@ public class MobileAppUsersController {
 		
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
-		if(user == null)
+		if(user == null){
 			model.addAttribute("status", ResultCode.EMAIL_ERROR);
-					
+		}
 		if(user.matchPassword(matchPass)){
 			int returnCode = sqlSession.delete("UserMapper.deleteUserByEmail", email);
 			if(returnCode==1){
