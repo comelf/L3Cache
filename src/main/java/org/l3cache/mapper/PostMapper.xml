@@ -43,6 +43,11 @@
 			ON P.post_id = L.L3_POSTS_post_id where P.post_id=#{pid};
 	</select>
 	
+	<select id="foundRows" resultType="int">
+		select count(*) from L3_POSTS;
+	</select>
+	
+	
 	<update id="updateWithImage">
 		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{pid};
 	</update>

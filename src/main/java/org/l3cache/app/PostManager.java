@@ -92,4 +92,11 @@ public class PostManager {
 		return false;
 	}
 
+	public int getTotalRows() {
+		
+		int total = sqlSession.selectOne("PostMapper.foundRows");
+		System.out.println("total rows = " +total);
+		return total;
+	}
+
 }

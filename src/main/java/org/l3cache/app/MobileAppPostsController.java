@@ -38,6 +38,7 @@ public class MobileAppPostsController {
 								Model model) {
 		try{
 			Response response = new Response(ResultCode.SUCCESS);
+			response.setTotal(postManager.getTotalRows());
 			response.setData(postManager.getRecentlyLists(start, id));
 			model.addAttribute(response);
 		}catch (Exception e){

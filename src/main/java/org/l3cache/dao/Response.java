@@ -3,6 +3,7 @@ package org.l3cache.dao;
 public class Response {
 	private int result;
 	private String message;
+	private int total;
 	private Object data;
 	
 	public Response (int result) {
@@ -31,6 +32,14 @@ public class Response {
 	
 	public void setData(Object data) {
 		this.data = data;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
 	}
 	
 	
