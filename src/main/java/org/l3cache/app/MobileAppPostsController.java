@@ -72,7 +72,7 @@ public class MobileAppPostsController {
 		log.debug("포스트 업로드 요청");
 		
 		if (fileManager.isValidatedFile(image)) {
-			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
 			String fileName = "";
 			try {
 				fileName = fileManager.saveFile(image, uploadPath);

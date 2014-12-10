@@ -15,10 +15,10 @@ public class FileManager {
 				originName.length());
 		UUID uuid = UUID.randomUUID();
 		String fileName = uuid.toString().replace("-", "") + lastName;
-		File file = new File(uploadPath + fileName);
+		File file = new File(uploadPath + File.separator +fileName);
 		image.transferTo(file);
 
-		return fileName + lastName;
+		return fileName;
 
 	}
 
