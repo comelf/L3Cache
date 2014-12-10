@@ -18,7 +18,7 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by P.writeDate DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by P.writeDate DESC, P.post_id DESC LIMIT #{start},20;	
 	</select>
 	
 	<insert id="create">
@@ -87,7 +87,7 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20;	
 	</select>
 	
 	<select id="countUserPostsList" resultType="int">
@@ -108,7 +108,7 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20;	
 	</select>
 	
 	<select id="countUserLikesList" resultType="int">
