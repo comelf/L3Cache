@@ -7,10 +7,14 @@ import org.l3cache.model.Post;
 import org.l3cache.model.PostId;
 import org.l3cache.model.PostSel;
 import org.l3cache.model.WritePost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PostManager {
 	private static final int SQL_SUCCESS = 1;
 	private SqlSession sqlSession;
+	private static final Logger log = LoggerFactory
+			.getLogger(PostManager.class);
 
 	public PostManager(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
@@ -72,6 +76,7 @@ public class PostManager {
 	public boolean likePost(long pid, int uid) {
 		PostId postId = new PostId(pid, uid);
 		if (sqlSession.insert("PostMapper.likePost", postId) == SQL_SUCCESS) {
+			log.debug("like PostId ={} UserId ={}", pid, uid);
 			return true;
 		}
 		return false;
@@ -80,6 +85,7 @@ public class PostManager {
 	public boolean unlikePost(long pid, int uid) {
 		PostId postId = new PostId(pid, uid);
 		if (sqlSession.delete("PostMapper.unlikePost", postId) == SQL_SUCCESS) {
+			log.debug("Unlike PostId ={} UserId ={}", pid, uid);
 			return true;
 		}
 		return false;
