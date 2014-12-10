@@ -3,16 +3,16 @@ package org.l3cache.model;
 import org.apache.ibatis.type.Alias;
 
 @Alias("postSe")
-public class PostSe {
+public class PostSel {
 
 	private int start;
 	private int uid;
 	
-	public PostSe() {
+	public PostSel() {
 		
 	}
 	
-	public PostSe(int start, int uid) {
+	public PostSel(int start, int uid) {
 		this.start = start;
 		this.uid = uid;
 	}

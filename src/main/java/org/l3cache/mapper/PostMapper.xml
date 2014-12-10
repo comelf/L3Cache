@@ -72,4 +72,47 @@
 		update L3_POSTS set post_read = post_read + 1 where post_id = #{pid};
 	</update>
 	
+	<select id="selectUserPostsList" resultType="post">
+		select 	P.post_id as pid, 
+				P.title as title, 
+				P.shopUrl as shopUrl,
+				P.contents as contents,
+				P.imgUrl as imgUrl, 
+				P.price as price, 
+				P.writeDate as writeDate, 
+				U.email as writer, 
+				count(L.L3_POSTS_post_id) as numLike,
+				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
+		from L3_POSTS AS P
+            LEFT JOIN L3_USERS AS U
+			ON P.write_user_id = U.user_id
+			LEFT JOIN LIKE_POSTS AS L
+			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC LIMIT #{start},20;	
+	</select>
+	
+	<select id="countUserPostsList" resultType="int">
+		select count(*) from L3_POSTS where write_user_id= #{uid};
+	</select>
+	
+	<select id="selectUserLikesList" resultType="post">
+		select 	P.post_id as pid, 
+				P.title as title, 
+				P.shopUrl as shopUrl,
+				P.contents as contents,
+				P.imgUrl as imgUrl, 
+				P.price as price, 
+				P.writeDate as writeDate, 
+				U.email as writer, 
+				count(L.L3_POSTS_post_id) as numLike
+		from L3_POSTS AS P
+            LEFT JOIN L3_USERS AS U
+			ON P.write_user_id = U.user_id
+			LEFT JOIN LIKE_POSTS AS L
+			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC LIMIT #{start},20;	
+	</select>
+	
+	<select id="countUserLikesList" resultType="int">
+		select count(*) from LIKE_POSTS where L3_USERS_user_id = #{uid};
+	</select>
+	
 </mapper>

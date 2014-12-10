@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.l3cache.dao.Response;
 import org.l3cache.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +26,9 @@ public class MobileAppUsersController {
 	
 	@Autowired
 	SqlSession sqlSession;
+	
+	@Autowired
+	private PostManager postManager;
 	
 	@RequestMapping(value="/new", method = {RequestMethod.POST, RequestMethod.GET})
 	public void newUser(@RequestParam(value = "email") String email,
@@ -88,4 +93,25 @@ public class MobileAppUsersController {
 		}
 	}
 	
+	@RequestMapping(value="/{uid}/likes")
+	public void getMyLikes(@PathVariable("uid") int uid,@RequestParam(value = "start") int start, Model model) {
+		if(uid>0 && start>=0){
+			Response response = new Response(ResultCode.SUCCESS);
+			response.setTotal(postManager.getUserLikesCount(uid));
+			response.setData(postManager.getUserLikesList(uid, start));
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
+	
+	@RequestMapping(value="/{uid}/posts")
+	public void getMySnap(@PathVariable("uid") int uid,@RequestParam(value = "start") int start, Model model) {
+		if(uid>0 && start>=0){
+			Response response = new Response(ResultCode.SUCCESS);
+			response.setTotal(postManager.getUserPostsCount(uid));
+			response.setData(postManager.getUserPostsList(uid, start));
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
 }

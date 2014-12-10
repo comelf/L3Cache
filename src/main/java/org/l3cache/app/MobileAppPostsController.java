@@ -66,13 +66,13 @@ public class MobileAppPostsController {
 			@RequestParam("shopUrl") String shopUrl,
 			@RequestParam("contents") String contents,
 			@RequestParam("image") MultipartFile image,
-			@RequestParam("price") String price,
+			@RequestParam("price") int price,
 			@RequestParam("id") int id,
 			HttpSession session) {
 		log.debug("포스트 업로드 요청");
 		
 		if (fileManager.isValidatedFile(image)) {
-			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
 			String fileName = "";
 			try {
 				fileName = fileManager.saveFile(image, uploadPath);
@@ -80,7 +80,7 @@ public class MobileAppPostsController {
 				log.debug("파일 저장 오류 = {}",e.toString());
 				return "redirect:/app/posts/error";
 			}
-			WritePost post = new WritePost(title, shopUrl, contents,localhost+uploadPath+fileName, price, id);
+			WritePost post = new WritePost(title, shopUrl, contents,localhost+"/postsImages/"+fileName, price, id);
 			if(postManager.savePost(post)){
 				return "redirect:/app/posts/success";
 			}
@@ -94,7 +94,7 @@ public class MobileAppPostsController {
 			@RequestParam("shopUrl") String shopUrl,
 			@RequestParam("contents") String contents,
 			@RequestParam("image") String imageUrl,
-			@RequestParam("price") String price,
+			@RequestParam("price") int price,
 			@RequestParam("id") int id,
 			Model model) {
 		log.debug("포스트 업로드 요청 with ImgURL");
@@ -123,7 +123,7 @@ public class MobileAppPostsController {
 						@RequestParam("shopUrl") String shopUrl,
 						@RequestParam("contents") String contents,
 						@RequestParam("image") MultipartFile image,
-						@RequestParam("price") String price,
+						@RequestParam("price") int price,
 						@RequestParam("id") int id,
 						HttpSession session) {
 		
@@ -188,7 +188,7 @@ public class MobileAppPostsController {
 	}
 	
 	@RequestMapping(value="/{pid}/read", method = {RequestMethod.POST,RequestMethod.GET})
-	public void readPost(@RequestParam("pid") long pid,
+	public void readPost(@PathVariable("pid") long pid,
 							Model model) {
 		if(postManager.readPost(pid)){
 			model.addAttribute("status", ResultCode.SUCCESS);

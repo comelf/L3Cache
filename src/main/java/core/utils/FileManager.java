@@ -15,7 +15,7 @@ public class FileManager {
 				originName.length());
 		UUID uuid = UUID.randomUUID();
 		String fileName = uuid.toString().replace("-", "");
-		File file = new File(uploadPath + fileName + lastName);
+		File file = new File(uploadPath +File.pathSeparator+ fileName + lastName);
 		image.transferTo(file);
 
 		return fileName;

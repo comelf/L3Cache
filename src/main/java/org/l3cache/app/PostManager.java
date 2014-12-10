@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.l3cache.model.Post;
 import org.l3cache.model.PostId;
-import org.l3cache.model.PostSe;
+import org.l3cache.model.PostSel;
 import org.l3cache.model.WritePost;
 
 public class PostManager {
@@ -18,7 +18,7 @@ public class PostManager {
 
 	public List<Post> getRecentlyLists(int start, int uid) {
 		start = (start -1) * 20;
-		PostSe postSe = new PostSe(start, uid);
+		PostSel postSe = new PostSel(start, uid);
 		return sqlSession.selectList("PostMapper.selectRecentlyList", postSe);
 	}
 
@@ -97,6 +97,26 @@ public class PostManager {
 		int total = sqlSession.selectOne("PostMapper.foundRows");
 		System.out.println("total rows = " +total);
 		return total;
+	}
+
+	public List<Post> getUserPostsList(int uid, int start) {
+		start = (start -1) * 20;
+		PostSel postSel = new PostSel(start, uid);
+		return sqlSession.selectList("PostMapper.selectUserPostsList", postSel);
+	}
+
+	public int getUserPostsCount(int uid) {
+		return sqlSession.selectOne("PostMapper.countUserPostsList", uid);
+	}
+
+	public int getUserLikesCount(int uid) {
+		return sqlSession.selectOne("PostMapper.countUserLikesList", uid);
+	}
+
+	public Object getUserLikesList(int uid, int start) {
+		start = (start -1) * 20;
+		PostSel postSel = new PostSel(start, uid);
+		return sqlSession.selectList("PostMapper.selectUserLikesList", postSel);
 	}
 
 }

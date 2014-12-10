@@ -8,7 +8,7 @@ public class WritePost {
 	private String shopUrl;
 	private String contents;
 	private String imgUrl;
-	private String price;
+	private int price;
 	private long writer;
 	
 	public WritePost() {
@@ -16,7 +16,7 @@ public class WritePost {
 	}
 	
 	public WritePost(String title, String shopUrl, String contents,
-			String imgUrl, String price, long id) {
+			String imgUrl, int price, long id) {
 		this.title = title;
 		this.shopUrl = shopUrl;
 		this.contents = contents;
@@ -57,11 +57,11 @@ public class WritePost {
 		this.imgUrl = imgUrl;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
