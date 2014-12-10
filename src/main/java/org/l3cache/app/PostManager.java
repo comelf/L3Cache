@@ -18,8 +18,8 @@ public class PostManager {
 
 	public List<Post> getRecentlyLists(int start, int uid) {
 		start = (start -1) * 20;
-		PostSel postSe = new PostSel(start, uid);
-		return sqlSession.selectList("PostMapper.selectRecentlyList", postSe);
+		PostSel postSel = new PostSel(start, uid);
+		return sqlSession.selectList("PostMapper.selectRecentlyList", postSel);
 	}
 
 	public Post getPostDetail(long pid) {

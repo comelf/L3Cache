@@ -2,7 +2,7 @@ package org.l3cache.model;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("postSe")
+@Alias("postSel")
 public class PostSel {
 
 	private int start;
