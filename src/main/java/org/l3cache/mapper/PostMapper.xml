@@ -18,11 +18,11 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by P.writeDate DESC, P.post_id DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by P.writeDate DESC, P.post_id DESC LIMIT #{start},20	
 	</select>
 	
 	<insert id="create">
-		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer});
+		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer})
 	</insert>
 	
 	<select id="selectOnePost" resultType="post">
@@ -40,7 +40,7 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L 
-			ON P.post_id = L.L3_POSTS_post_id where P.post_id=#{pid};
+			ON P.post_id = L.L3_POSTS_post_id where P.post_id=#{pid}
 	</select>
 	
 	<select id="foundRows" resultType="int">
@@ -49,27 +49,27 @@
 	
 	
 	<update id="updateWithImage">
-		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{pid};
+		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{pid}
 	</update>
 	
 	<update id="updateWithoutImage">
-		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, price=#{price} where post_id =#{pid};
+		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, price=#{price} where post_id =#{pid}
 	</update>
 	
 	<delete id="deletePost">
-		delete from L3_POSTS where post_id=#{pid} and write_user_id =#{uid};
+		delete from L3_POSTS where post_id=#{pid} and write_user_id =#{uid}
 	</delete>
 	
 	<insert id="likePost">
-		insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(#{uid},#{pid});
+		insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(#{uid},#{pid})
 	</insert>
 	
 	<delete id="unlikePost">
-		delete from LIKE_POSTS where L3_POSTS_post_id=#{pid} and L3_USERS_user_id =#{uid};
+		delete from LIKE_POSTS where L3_POSTS_post_id=#{pid} and L3_USERS_user_id =#{uid}
 	</delete>
 	
 	<update id="readPost">
-		update L3_POSTS set post_read = post_read + 1 where post_id = #{pid};
+		update L3_POSTS set post_read = post_read + 1 where post_id = #{pid}
 	</update>
 	
 	<select id="selectUserPostsList" resultType="post">
@@ -87,11 +87,11 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20
 	</select>
 	
 	<select id="countUserPostsList" resultType="int">
-		select count(*) from L3_POSTS where write_user_id= #{uid};
+		select count(*) from L3_POSTS where write_user_id= #{uid}
 	</select>
 	
 	<select id="selectUserLikesList" resultType="post">
@@ -108,11 +108,11 @@
             LEFT JOIN L3_USERS AS U
 			ON P.write_user_id = U.user_id
 			LEFT JOIN LIKE_POSTS AS L
-			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20;	
+			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20	
 	</select>
 	
 	<select id="countUserLikesList" resultType="int">
-		select count(*) from LIKE_POSTS where L3_USERS_user_id = #{uid};
+		select count(*) from LIKE_POSTS where L3_USERS_user_id = #{uid}
 	</select>
 	
 </mapper>

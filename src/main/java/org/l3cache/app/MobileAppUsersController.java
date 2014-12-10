@@ -11,10 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.NestedServletException;
 
 import core.utils.ResultCode;
 
@@ -113,5 +116,58 @@ public class MobileAppUsersController {
 		}else{
 			model.addAttribute("status", ResultCode.ERROR);
 		}
+	}
+	
+	@RequestMapping(value="/{uid}")
+	public void getMyInfo(@PathVariable("uid") int uid, Model model) {
+		if(uid>0){
+			User user = sqlSession.selectOne("UserMapper.findByUid", uid);
+			if(user == null){
+				model.addAttribute(new Response(ResultCode.EMAIL_ERROR));
+			}else{
+				Response response = new Response(ResultCode.SUCCESS);
+				response.setData(user);
+				model.addAttribute(response);
+			}
+		}else{
+			model.addAttribute(new Response(ResultCode.ERROR));
+		}
+	}
+	
+	@RequestMapping(value="/edit/{uid}")
+	public void editMyInfo(@PathVariable("uid") int uid, 
+			@RequestParam String email,
+			@RequestParam String password,
+			@RequestParam String newPassword, Model model) {
+		if(uid>0){
+			User user = sqlSession.selectOne("UserMapper.findByUidwithPassword", uid);
+			String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
+			if(user == null){
+				model.addAttribute("status", ResultCode.EMAIL_ERROR);
+			}else if(user.matchPassword(matchPass)){
+				user.setEmail(email);
+				user.setPassword(newPassword);
+				sqlSession.update("UserMapper.updateUser", user);
+				model.addAttribute("status", ResultCode.SUCCESS);
+			}else{
+				model.addAttribute("status", ResultCode.PASSWORD_ERROR);
+			}
+		}else{
+			model.addAttribute("status", ResultCode.ERROR);
+		}
+	}
+	
+	@ExceptionHandler(NestedServletException.class)
+	public ModelAndView nullPoint(Exception e) 
+	{
+		log.error("NestedServletException : ", e.toString());
+		return new ModelAndView("NestedServletException").addObject("status", ResultCode.ERROR);
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ModelAndView illegalArgument(Exception e) 
+	{
+		log.error("ArgumentException : ", e.toString());
+		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR);
 	}
 }

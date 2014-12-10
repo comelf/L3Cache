@@ -19,10 +19,17 @@
 		delete from L3_USERS where email = #{email}
 	</delete>
 	
+	<select id="findByUid" resultType="user">
+		select user_id as userId, email from L3_USERS where user_id = #{uid}
+	</select>
+	
+	<select id="findByUidwithPassword" resultType="user">
+		select user_id as userId, email, password from L3_USERS where user_id = #{uid}
+	</select>
+	
+	<update id="updateUser">
+		update L3_USERS set email=#{email}, password=password(#{password}) where user_id =#{uid}
+	</update>
 	
 	
-<!-- 	<update id="update">
-		update USERS 
-		set password= #{password}, name =#{name}, email = #{email} where userId= #{userId} 
-	</update> -->
 </mapper>
