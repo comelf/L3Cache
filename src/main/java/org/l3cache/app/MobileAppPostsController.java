@@ -42,7 +42,21 @@ public class MobileAppPostsController {
 		try{
 			Response response = new Response(ResultCode.SUCCESS);
 			response.setTotal(postManager.getTotalRows());
-			response.setData(postManager.getRecentlyLists(start, id));
+			
+			switch (sort) {
+			case 0:
+				response.setData(postManager.getRecentlyLists(start, id));
+				break;
+			case 1:
+				response.setData(postManager.getRecentlyLists(start, id));
+				break;
+			case 2:
+				response.setData(postManager.getRecentlyLists(start, id));
+				break;
+			default:
+				response.setData(postManager.getRecentlyLists(start, id));
+				break;
+			}
 			model.addAttribute(response);
 		}catch (Exception e){
 			model.addAttribute(new Response(ResultCode.ERROR));

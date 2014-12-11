@@ -102,6 +102,7 @@ public class MobileAppUsersController {
 			Response response = new Response(ResultCode.SUCCESS);
 			response.setTotal(postManager.getUserLikesCount(uid));
 			response.setData(postManager.getUserLikesList(uid, start));
+			model.addAttribute(response);
 		}else{
 			model.addAttribute("status", ResultCode.ERROR);
 		}
@@ -113,6 +114,7 @@ public class MobileAppUsersController {
 			Response response = new Response(ResultCode.SUCCESS);
 			response.setTotal(postManager.getUserPostsCount(uid));
 			response.setData(postManager.getUserPostsList(uid, start));
+			model.addAttribute(response);
 		}else{
 			model.addAttribute("status", ResultCode.ERROR);
 		}
