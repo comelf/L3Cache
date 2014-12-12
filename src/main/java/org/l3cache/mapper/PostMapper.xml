@@ -11,6 +11,7 @@
 				P.imgUrl as imgUrl, 
 				P.price as price, 
 				P.writeDate as writeDate, 
+				P.post_read as read,
 				U.email as writer, 
 				count(L.L3_POSTS_post_id) as numLike,
 				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
@@ -33,6 +34,7 @@
 				P.imgUrl as imgUrl, 
 				P.price as price, 
 				P.writeDate as writeDate, 
+				P.post_read as read,
 				U.email as writer, 
 				P.read as read, 
 				count(L.L3_POSTS_post_id) AS numLike 
@@ -79,7 +81,8 @@
 				P.contents as contents,
 				P.imgUrl as imgUrl, 
 				P.price as price, 
-				P.writeDate as writeDate, 
+				P.writeDate as writeDate,
+				P.post_read as read, 
 				U.email as writer, 
 				count(L.L3_POSTS_post_id) as numLike,
 				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
@@ -102,6 +105,7 @@
 				P.imgUrl as imgUrl, 
 				P.price as price, 
 				P.writeDate as writeDate, 
+				P.post_read as read,
 				U.email as writer, 
 				count(L.L3_POSTS_post_id) as numLike,
 				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
