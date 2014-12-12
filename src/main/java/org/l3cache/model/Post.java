@@ -14,7 +14,7 @@ public class Post {
 	private String price;	
 	private Date writeDate;
 	private String writer;
-	private int read;
+	private int readCount;
 	private int numLike;
 	private int userLike;
 	
@@ -31,7 +31,7 @@ public class Post {
 
 	public Post(int pid, String title, String shopUrl, String contents,
 			String imgUrl, String price, Date writeDate, String writer,
-			int read, int numLike) {
+			int readCount, int numLike) {
 		super();
 		this.pid = pid;
 		this.title = title;
@@ -41,7 +41,7 @@ public class Post {
 		this.price = price;
 		this.writeDate = writeDate;
 		this.writer = writer;
-		this.read = read;
+		this.readCount = readCount;
 		this.numLike = numLike;
 	}
 
@@ -147,11 +147,11 @@ public class Post {
 	}
 
 	public int getRead() {
-		return read;
+		return readCount;
 	}
 
-	public void setRead(int read) {
-		this.read = read;
+	public void setRead(int readCount) {
+		this.readCount = readCount;
 	}
 	
 	
