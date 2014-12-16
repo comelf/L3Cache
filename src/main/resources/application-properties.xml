@@ -4,6 +4,13 @@
 	<comment>application-properties</comment>
 	
 	<!-- NAVER SHOP -->
+	
+	<!-- Test Dummy Key -->
+	<!-- c1b406b32dbbbbeee5f2a36ddc14067f -->
+	
+	<!-- Test Dummy Key -->
+	<!-- 77944ea87424da7ad1d8ff35b4e8423a -->
+	
 	<entry key="naver.shop.key">77944ea87424da7ad1d8ff35b4e8423a</entry>
 	<entry key="naver.shop.url"><![CDATA[http://openapi.naver.com/search?key={key}&query={query}&display={display}&start={start}&target=shop&sort={sort}]]></entry>
 	<entry key="naver.adult.url"><![CDATA[http://openapi.naver.com/search?key={key}&target={target}&query={query}]]></entry>

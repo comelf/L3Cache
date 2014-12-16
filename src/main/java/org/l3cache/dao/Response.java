@@ -69,7 +69,7 @@ public class Response {
 	}
 
 	public static Response result_Zero() {
-		Response response = new Response(ResultCode.SEARCH_RESULT_ZERO);
+		Response response = new Response(ResultCode.SUCCESS);
 		response.setMessage("검색결과 없음");
 		response.setTotal(0);
 		return response;

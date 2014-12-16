@@ -75,7 +75,7 @@ public class SearchController {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ModelAndView illegalArgument(Exception e){
 		log.debug("[DEBUG] {}",e.getMessage());
-		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ARGUMENT_ERROR);
+		return new ModelAndView("MissingServletRequestParameterException").addObject("result", ResultCode.ARGUMENT_ERROR);
 	}
 	
 	@ExceptionHandler(value={ NullPointerException.class, IllegalArgumentException.class})
@@ -83,5 +83,13 @@ public class SearchController {
 		log.debug("[DEBUG] {}",e.getMessage());
 		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR);
 	}
+	
+	@ExceptionHandler(UnmarshallingFailureException.class)
+	public ModelAndView unmarshallingFailureException(Exception e){
+		log.debug("[DEBUG] {}",e.getMessage());
+		return new ModelAndView("UnmarshallingFailureException").addObject("result", ResultCode.ARGUMENT_ERROR);
+	}
+	
+	
 
 }

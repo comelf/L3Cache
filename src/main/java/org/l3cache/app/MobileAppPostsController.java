@@ -79,7 +79,7 @@ public class MobileAppPostsController {
 	}
 
 	@RequestMapping(value = "/newurl")
-	public Response newPostWithUrl(@RequestParam("title") String title,
+	public Status newPostWithUrl(@RequestParam("title") String title,
 							   @RequestParam("shopUrl") String shopUrl,
 							   @RequestParam("contents") String contents,
 							   @RequestParam("image") String imageUrl,
@@ -88,10 +88,10 @@ public class MobileAppPostsController {
 		
 		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
 		if(!post.isValidated()){
-			return Response.arguemnt_error();
+			return Status.argument_Error();
 		}
 		postManager.savePost(post);
-		return Response.success();		
+		return Status.success();		
 	}
 
 	@RequestMapping("/success")
@@ -128,7 +128,7 @@ public class MobileAppPostsController {
 	}
 	
 	@RequestMapping(value = "/editurl/{pid}")
-	public Response editPostWithUrl(@RequestParam("title") String title,
+	public Status editPostWithUrl(@RequestParam("title") String title,
 							  		@RequestParam("shopUrl") String shopUrl,
 							  		@RequestParam("contents") String contents,
 							  		@RequestParam("image") String imageUrl,
@@ -137,37 +137,37 @@ public class MobileAppPostsController {
 		
 		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
 		if(!post.isValidated()){
-			return Response.arguemnt_error();
+			return Status.argument_Error();
 		}
 		postManager.savePost(post);
-		return Response.success();		
+		return Status.success();		
 	}
 
 	@RequestMapping(value = "/delete/{pid}", method = { RequestMethod.DELETE, RequestMethod.GET })
-	public Response deletePost(@PathVariable("pid") long pid,
+	public Status deletePost(@PathVariable("pid") long pid,
 					       @RequestParam("uid") int uid) {
 		postManager.deletePost(pid, uid);
-		return Response.success();
+		return Status.success();
 	}
 
 	@RequestMapping(value = "/like", method = { RequestMethod.POST, RequestMethod.GET })
-	public Response likePost(@RequestParam("pid") long pid,
+	public Status likePost(@RequestParam("pid") long pid,
 							 @RequestParam("uid") int uid, Model model) {
 		postManager.likePost(pid, uid);
-		return Response.success();
+		return Status.success();
 	}
 
 	@RequestMapping(value = "/like", method = { RequestMethod.DELETE, RequestMethod.GET })
-	public Response unlikePost(@RequestParam("pid") long pid,
+	public Status unlikePost(@RequestParam("pid") long pid,
 			@RequestParam("uid") int uid, Model model) {
 		postManager.unlikePost(pid, uid);
-		return Response.success();
+		return Status.success();
 	}
 
 	@RequestMapping(value = "/{pid}/read", method = { RequestMethod.POST, RequestMethod.GET })
-	public Response readPost(@PathVariable("pid") long pid, Model model) {
+	public Status readPost(@PathVariable("pid") long pid, Model model) {
 		postManager.readPost(pid);
-		return Response.success();
+		return Status.success();
 	}
 
 	@RequestMapping(value="/{uid}/likes")
