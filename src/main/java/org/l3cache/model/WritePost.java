@@ -73,5 +73,28 @@ public class WritePost {
 		this.writer = writer;
 	}
 
+	public boolean isValidated() {
+		if(this.title.isEmpty()){
+			return false;
+		}
+		if(this.shopUrl.isEmpty()){
+			return false;
+		}
+		if(this.contents.isEmpty()){
+			return false;
+		}
+		if(this.imgUrl.isEmpty()){
+			return false;
+		}
+		if(this.price<=0){
+			return false;
+		}
+		if(this.writer<=0){
+			return false;
+		}
+		
+		return true;
+	}
+
 	
 }

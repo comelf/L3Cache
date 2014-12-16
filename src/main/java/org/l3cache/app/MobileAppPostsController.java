@@ -1,7 +1,5 @@
 package org.l3cache.app;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpSession;
 
 import org.l3cache.dao.Response;
@@ -9,222 +7,200 @@ import org.l3cache.model.WritePost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.NestedServletException;
 
+import core.utils.FileAccessException;
 import core.utils.FileManager;
 import core.utils.ResultCode;
 
-@Controller
+@RestController
 @RequestMapping("/app/posts")
 public class MobileAppPostsController {
-	private static final Logger log = LoggerFactory.getLogger(MobileAppPostsController.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(MobileAppPostsController.class);
 	private static final String localhost = "http://125.209.199.221:8080";
+	private static final int STARTING_COUNT = 1;
+	
 	@Autowired
 	private PostManager postManager;
-	
+
 	@Autowired
 	private FileManager fileManager;
-	
+
 	@RequestMapping("/")
-	public void userBasePostsList(@RequestParam("id") int id,
-								@RequestParam("start") int start,
-								@RequestParam("sort") int sort,
-								Model model) {
-		try{
-			Response response = new Response(ResultCode.SUCCESS);
-			response.setTotal(postManager.getTotalRows());
-			
-			switch (sort) {
-			case 0:
-				response.setData(postManager.getRecentlyLists(start, id));
-				break;
-			case 1:
-				response.setData(postManager.getRecentlyLists(start, id));
-				break;
-			case 2:
-				response.setData(postManager.getRecentlyLists(start, id));
-				break;
-			default:
-				response.setData(postManager.getRecentlyLists(start, id));
-				break;
-			}
-			model.addAttribute(response);
-		}catch (Exception e){
-			model.addAttribute(new Response(ResultCode.ERROR));
-			log.debug("포스트 리스트 출력 오류 = {}",e.toString());
-		}
+	public Response userBasePostsList(@RequestParam("id") int id,
+									  @RequestParam("start") int start, 
+									  @RequestParam("sort") int sort) {
+		log.info("[/app/posts/] request id = {}, start = {}, sort= {}", id, start, sort);
+		
+		Response response = new Response(ResultCode.SUCCESS);
+		response.setTotal(postManager.getTotalRows());
+		response.setData(postManager.getPostsLists(start, id, sort));
+		return response;
 	}
-	
-	
+
 	@RequestMapping("/{pid}")
-	public void getPostDetail(@PathVariable("pid") long pid, Model model) {
-		log.debug("/app/posts/[pid] = {}",pid);
-		try{
-			Response response = new Response(ResultCode.SUCCESS);
-			response.setData(postManager.getPostDetail(pid));
-			model.addAttribute(response);
-		}catch (Exception e){
-			model.addAttribute(new Response(ResultCode.ERROR));
-			log.debug("포스트 출력 오류 = {}",e.toString());
-		}
+	public Response getPostDetail(@PathVariable("pid") long pid, Model model) {
+		log.info("[/app/{}/] request", pid);
+		
+		Response response = new Response(ResultCode.SUCCESS);
+		response.setData(postManager.getPostDetail(pid));
+		return response;
 	}
-	
-	@RequestMapping(value="/new")
+
+	@RequestMapping(value = "/new")
 	public String newPost(@RequestParam("title") String title,
-			@RequestParam("shopUrl") String shopUrl,
-			@RequestParam("contents") String contents,
-			@RequestParam("image") MultipartFile image,
-			@RequestParam("price") int price,
-			@RequestParam("id") int id,
-			HttpSession session) {
-		log.debug("포스트 업로드 요청");
-		
-		if (fileManager.isValidatedFile(image)) {
-			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
-			String fileName = "";
-			try {
-				fileName = fileManager.saveFile(image, uploadPath);
-			} catch (IllegalStateException | IOException e) {
-				log.debug("파일 저장 오류 = {}",e.toString());
-				return "redirect:/app/posts/error";
-			}
-			WritePost post = new WritePost(title, shopUrl, contents,localhost+"/postsImages/"+fileName, price, id);
-			if(postManager.savePost(post)){
-				return "redirect:/app/posts/success";
-			}
+						  @RequestParam("shopUrl") String shopUrl,
+						  @RequestParam("contents") String contents,
+						  @RequestParam("image") MultipartFile image,
+						  @RequestParam("price") int price, 
+						  @RequestParam("id") int id,
+						  HttpSession session) {
+
+		if (!fileManager.isValidatedFile(image)) {
+			return "redirect:/app/posts/error";
 		}
-		
-		return "redirect:/app/posts/error";
+
+		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
+		String fileName = fileManager.saveFile(image, uploadPath);
+		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
+		postManager.savePost(post);
+		return "redirect:/app/posts/success";
+
 	}
-	
-	@RequestMapping(value="/newurl")
-	public void newPostWithUrl(@RequestParam("title") String title,
-			@RequestParam("shopUrl") String shopUrl,
-			@RequestParam("contents") String contents,
-			@RequestParam("image") String imageUrl,
-			@RequestParam("price") int price,
-			@RequestParam("id") int id,
-			Model model) {
-		log.debug("포스트 업로드 요청 with ImgURL");
+
+	@RequestMapping(value = "/newurl")
+	public Response newPostWithUrl(@RequestParam("title") String title,
+							   @RequestParam("shopUrl") String shopUrl,
+							   @RequestParam("contents") String contents,
+							   @RequestParam("image") String imageUrl,
+							   @RequestParam("price") int price, 
+							   @RequestParam("id") int id) {
 		
 		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
-		if(postManager.savePost(post)){
-			model.addAttribute("status", ResultCode.SUCCESS);
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
+		if(!post.isValidated()){
+			return Response.arguemnt_error();
 		}
+		postManager.savePost(post);
+		return Response.success();		
 	}
-	
+
 	@RequestMapping("/success")
-	public void postSuccess(Model model) {
-		 model.addAttribute("status", ResultCode.SUCCESS);
+	public Status postSuccess() {
+		return Status.success();
 	}
-	
+
 	@RequestMapping("/error")
-	public void postError(Model model) {
-		 model.addAttribute("status", ResultCode.ERROR);
+	public Status postError(Model model) {
+		return Status.error();
 	}
-	
+
 	@RequestMapping("/edit/{pid}")
 	public String editPost(@PathVariable("pid") long pid,
-						@RequestParam("title") String title,
-						@RequestParam("shopUrl") String shopUrl,
-						@RequestParam("contents") String contents,
-						@RequestParam("image") MultipartFile image,
-						@RequestParam("price") int price,
-						@RequestParam("id") int id,
-						HttpSession session) {
+						   @RequestParam("title") String title,
+						   @RequestParam("shopUrl") String shopUrl,
+						   @RequestParam("contents") String contents,
+						   @RequestParam("image") MultipartFile image,
+						   @RequestParam("price") int price, 
+						   @RequestParam("id") int id,
+						   HttpSession session) {
+
+		if (!fileManager.isValidatedFile(image) || !postManager.isExistentPost(pid)) {
+			return "redirect:/app/posts/error";
+		}
+
+		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
+		String beforeFile = postManager.getPostImageFilePath(pid);
+		String fileName = fileManager.saveAndRemoveFile(image, uploadPath, beforeFile);
+
+		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
+		postManager.updateWithImage(post);
+		return "redirect:/app/posts/success";
+	}
+	
+	@RequestMapping(value = "/editurl/{pid}")
+	public Response editPostWithUrl(@RequestParam("title") String title,
+							  		@RequestParam("shopUrl") String shopUrl,
+							  		@RequestParam("contents") String contents,
+							  		@RequestParam("image") String imageUrl,
+							  		@RequestParam("price") int price, 
+							  		@RequestParam("id") int id) {
 		
-		if (fileManager.isValidatedFile(image)) {
-			String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
-			String fileName = "";
-			try {
-				String beforeFile = postManager.getPostImageFilePath(pid);
-				fileName = fileManager.saveAndRemoveFile(image, uploadPath, beforeFile);
-			} catch (IllegalStateException | IOException e) {
-				log.debug("파일 저장 오류 = {}",e.toString());
-				return "redirect:/app/posts/error";
-			}
-			WritePost post = new WritePost(title, shopUrl, contents, localhost+uploadPath+fileName, price, id);
-			if(postManager.updateWithImage(post)){
-				return "redirect:/app/posts/success";
-			}
-		}else {
-			if(postManager.isExistentPost(pid)){
-				WritePost post = new WritePost(title, shopUrl, contents, "", price, id);
-				if(postManager.updateWithImage(post)){
-					return "redirect:/app/posts/success";
-				}
-			}
+		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
+		if(!post.isValidated()){
+			return Response.arguemnt_error();
+		}
+		postManager.savePost(post);
+		return Response.success();		
+	}
+
+	@RequestMapping(value = "/delete/{pid}", method = { RequestMethod.DELETE, RequestMethod.GET })
+	public Response deletePost(@PathVariable("pid") long pid,
+					       @RequestParam("uid") int uid) {
+		postManager.deletePost(pid, uid);
+		return Response.success();
+	}
+
+	@RequestMapping(value = "/like", method = { RequestMethod.POST, RequestMethod.GET })
+	public Response likePost(@RequestParam("pid") long pid,
+							 @RequestParam("uid") int uid, Model model) {
+		postManager.likePost(pid, uid);
+		return Response.success();
+	}
+
+	@RequestMapping(value = "/like", method = { RequestMethod.DELETE, RequestMethod.GET })
+	public Response unlikePost(@RequestParam("pid") long pid,
+			@RequestParam("uid") int uid, Model model) {
+		postManager.unlikePost(pid, uid);
+		return Response.success();
+	}
+
+	@RequestMapping(value = "/{pid}/read", method = { RequestMethod.POST, RequestMethod.GET })
+	public Response readPost(@PathVariable("pid") long pid, Model model) {
+		postManager.readPost(pid);
+		return Response.success();
+	}
+
+	@RequestMapping(value="/{uid}/likes")
+	public Response getMyLikes(@PathVariable("uid") int uid,
+							   @RequestParam(value = "start") int start) {
+		if(uid<STARTING_COUNT && start<STARTING_COUNT){
+			return Response.error();
 		}
 		
-		return "redirect:/app/posts/error";
+		Response response = Response.success();
+		response.setTotal(postManager.getUserLikesCount(uid));
+		response.setData(postManager.getUserLikesList(uid, start));
+		return response;
+	}
+	
+	@RequestMapping(value="/{uid}/posts")
+	public Response getMySnap(@PathVariable("uid") int uid,
+							  @RequestParam(value = "start") int start) {
+		if(uid<STARTING_COUNT && start<STARTING_COUNT){
+			return Response.error();
+		}
 		
+		Response response = Response.success();
+		response.setTotal(postManager.getUserPostsCount(uid));
+		response.setData(postManager.getUserPostsList(uid, start));
+		return response;
 	}
 	
-	@RequestMapping(value="/delete/{pid}", method = {RequestMethod.DELETE,RequestMethod.GET})
-	public void deletePost(@PathVariable("pid") long pid,
-							@RequestParam("uid") int uid,
-							Model model) {
-		if(postManager.deletePost(pid, uid)){
-			model.addAttribute("status", ResultCode.SUCCESS);
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
-		}
-	}
 	
-	@RequestMapping(value="/like", method = {RequestMethod.POST,RequestMethod.GET})
-	public void likePost(@RequestParam("pid") long pid,
-						@RequestParam("uid") int uid,
-							Model model) {
-		if(postManager.likePost(pid, uid)){
-			model.addAttribute("status", ResultCode.SUCCESS);
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
-		}
-	}
-	
-	@RequestMapping(value="/like", method = {RequestMethod.DELETE,RequestMethod.GET})
-	public void unlikePost(@RequestParam("pid") long pid,
-							@RequestParam("uid") int uid,
-							Model model) {
-		if(postManager.unlikePost(pid, uid)){
-			model.addAttribute("status", ResultCode.SUCCESS);
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
-		}
-	}
-	
-	@RequestMapping(value="/{pid}/read", method = {RequestMethod.POST,RequestMethod.GET})
-	public void readPost(@PathVariable("pid") long pid,
-							Model model) {
-		if(postManager.readPost(pid)){
-			model.addAttribute("status", ResultCode.SUCCESS);
-		}else{
-			model.addAttribute("status", ResultCode.ERROR);
-		}
-	}
-	
-	@ExceptionHandler(NestedServletException.class)
-	public ModelAndView nullPoint(Exception e) 
-	{
+	@ExceptionHandler(value={ NestedServletException.class, FileAccessException.class, IllegalArgumentException.class})
+	public ModelAndView exceptionHandler(Exception e) {
 		log.error("NestedServletException : ", e.toString());
-		return new ModelAndView("NestedServletException").addObject("status", ResultCode.ERROR);
+		return new ModelAndView("NestedServletException").addObject("status",ResultCode.ERROR);
 	}
-	
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ModelAndView illegalArgument(Exception e) 
-	{
-		log.error("ArgumentException : ", e.toString());
-		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR);
-	}
+
 }

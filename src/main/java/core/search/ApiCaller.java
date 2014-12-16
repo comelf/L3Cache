@@ -9,7 +9,8 @@ import org.springframework.web.client.RestTemplate;
 public class ApiCaller {
 	private static final int SUM_OF_PAGE = 5;
 	private String apiKey;
-	private String apiUrl;
+	private String shopApiUrl;
+	private String adultApiUrl;
 	private RestTemplate restTemplate;
 
 	public ApiCaller(RestTemplate restTemplate) {
@@ -20,23 +21,29 @@ public class ApiCaller {
 		this.apiKey = apiKey;
 	}
 
-	public void setApiUrl(String apiUrl) {
-		this.apiUrl = apiUrl;
+	public void setShopApiUrl(String shopApiUrl) {
+		this.shopApiUrl = shopApiUrl;
 	}
 	
-	public StreamSource getStreamSource(Map<String, Object> params) {
+	public void setAdultApiUrl(String adultApiUrl) {
+		this.adultApiUrl = adultApiUrl;
+	}
+
+	public StreamSource getShopApiStreamSource(Map<String, Object> params) {
 		int reqStart = (int)params.get("start");
 		int apiStart = reqStart / SUM_OF_PAGE + reqStart % SUM_OF_PAGE;
 		params.put("key", apiKey);
 		params.put("start",apiStart);
 		params.put("display",100);
-		return restTemplate.getForObject(apiUrl, StreamSource.class, params);
+		return restTemplate.getForObject(shopApiUrl, StreamSource.class, params);
 	}
-	
-	//test용
-	public String getString(Map<String, Object> params) {
+
+	public StreamSource getAdultApiStreamSource(Map<String, Object> params) {
 		params.put("key", apiKey);
-		return restTemplate.getForObject(apiUrl, String.class, params);
+		params.put("target", "adult");
+		return restTemplate.getForObject(adultApiUrl, StreamSource.class, params);
 	}
+
+
 
 }

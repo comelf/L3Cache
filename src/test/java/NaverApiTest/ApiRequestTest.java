@@ -1,9 +1,13 @@
 package naverApiTest;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.junit.Before;
@@ -62,19 +66,6 @@ public class ApiRequestTest {
 	}
 	
 	@Test
-	public void stringTest(){
-		String query = "청바지";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("display", 10);
-		params.put("start",1);
-		params.put("query", query);
-		params.put("sort", "sim");
-		
-		String result = searchHelper.naverApiToString(params);
-		System.out.println(result);
-	}
-	
-	@Test
 	public void xmlMarsallingTest() throws XmlMappingException, IOException, JAXBException {
 		String query = "청바지";
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -87,4 +78,34 @@ public class ApiRequestTest {
 		assertThat(si, is(notNullValue()));
 	}
 	
+	@Test
+	public void adultApiMarsallingTest1() throws XmlMappingException, IOException, JAXBException {
+		String query = "청바지";
+		Map<String, Object> adultParams = new HashMap<String, Object>();
+		adultParams.put("query", query);
+		assertThat(searchHelper.isAdultQuery(adultParams), is(false));
+	}
+	
+	@Test
+	public void adultApiMarsallingTest2() throws XmlMappingException, IOException, JAXBException {
+		String query = "성인사이트";
+		Map<String, Object> adultParams = new HashMap<String, Object>();
+		adultParams.put("query", query);
+		assertThat(searchHelper.isAdultQuery(adultParams), is(true));
+	}
+
+	public void streamToString(StreamSource ss){
+		try{
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+			transformer.transform(ss,result);
+			String strResult = writer.toString();
+			System.out.println(strResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

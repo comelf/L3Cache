@@ -20,6 +20,13 @@ public class ShopItems {
 		this.channel = channel;
 	}
 
+	public static ShopItems emptyItems() {
+		ShopItems shopItem = new ShopItems();
+		Channel channel = Channel.emptyChannel();
+		shopItem.setChannel(channel);
+		return shopItem;
+	}
+	
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class Channel{
 		private String title;
@@ -31,9 +38,16 @@ public class ShopItems {
 		private int display;
 		private List<Item> item;
 		
+		public static Channel emptyChannel() {
+			Channel channel = new Channel();
+			channel.setTotal(0);
+			return channel;
+		}
+		
 		public String getTitle() {
 			return title;
 		}
+		
 		public void setTitle(String title) {
 			this.title = title;
 		}
@@ -80,4 +94,6 @@ public class ShopItems {
 			this.item = item;
 		}
 	}
+
+	
 }

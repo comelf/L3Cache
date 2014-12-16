@@ -1,5 +1,7 @@
 package org.l3cache.dao;
 
+import core.utils.ResultCode;
+
 public class Response {
 	private int result;
 	private String message;
@@ -42,5 +44,34 @@ public class Response {
 		this.total = total;
 	}
 	
-	
+	public static Response success() {
+		return new Response(ResultCode.SUCCESS);
+	}
+
+	public static Response arguemnt_error() {
+		return new Response(ResultCode.ARGUMENT_ERROR);
+	}
+
+	public static Response error() {
+		return new Response(ResultCode.ERROR);
+	}
+
+	public static Response email_error() {
+		return new Response(ResultCode.EMAIL_ERROR);
+	}
+
+	public static Response password_error() {
+		return new Response(ResultCode.PASSWORD_ERROR);
+	}
+
+	public static Response adult_Query() {
+		return new Response(ResultCode.ADULT_QUERY);
+	}
+
+	public static Response result_Zero() {
+		Response response = new Response(ResultCode.SEARCH_RESULT_ZERO);
+		response.setMessage("검색결과 없음");
+		response.setTotal(0);
+		return response;
+	}
 }

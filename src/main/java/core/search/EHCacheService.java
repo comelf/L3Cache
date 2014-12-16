@@ -47,16 +47,10 @@ public class EHCacheService {
 		int start = (int)params.get("start");
 		ShopItems si = searchHelper.searchNaverApi(params);
 		
-		if(si==null){
-			return new Response(1);
-		}
-		
 		int total = si.getChannel().getTotal();
-		int arrCount = si.getChannel().getItem().size();
-		log.debug("api response count={}, arrSize={})",total,arrCount);
 		
 		if(total==0){
-			return new Response(1);
+			return Response.result_Zero();
 		}else if(total<=20){
 			Response response = new Response(ResultCode.SUCCESS);
 			SearchResult result = new SearchResult(start, total, si.getChannel().getItem().subList(0, total));

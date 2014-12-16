@@ -1,13 +1,19 @@
 package core.search;
 
+import java.io.StringWriter;
 import java.util.Map;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.l3cache.dao.AdultResult;
 import org.l3cache.dao.ShopItems;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 public class SearchHelper {
+	private static final int ADULT_QUERY = 1;
 	private ApiCaller apiCaller;
 	private Jaxb2Marshaller unmarshaller;
 	
@@ -15,31 +21,46 @@ public class SearchHelper {
 		this.apiCaller = apiCaller;
 		this.unmarshaller = jaxb2Marshaller;
 	}
-
-	//test method
-	public StreamSource naverApiStream(Map<String, Object> params) {
-		StreamSource ss =  apiCaller.getStreamSource(params);
-		return ss;
-	}
 	
-	//test method
-	public String naverApiToString(Map<String, Object> params) {
-		String ss =  apiCaller.getString(params);
-		return ss;
-	}
-	
-	//apiCaller가 넘기는 값에 대한 에러 처리해야됨.
-	// 예) 결과값이 없을경우, 일일 쿼리 제한을 넘길경우
-	// return null로 넘기지 말고 에러에 대한것 넘길것!
 	public ShopItems searchNaverApi(Map<String, Object> params) {
-		StreamSource ss =  apiCaller.getStreamSource(params);
-		ShopItems shopItems = (ShopItems) unmarshaller.unmarshal(ss);
+		StreamSource ss =  apiCaller.getShopApiStreamSource(params);	
+		ShopItems shopItems = null;
 		
-		if(shopItems.getChannel().getTotal()==0)
-			return null;
-
+		try {
+			shopItems = (ShopItems) unmarshaller.unmarshal(ss);
+		} catch (Exception e) {
+			shopItems = ShopItems.emptyItems();
+		}
+		
 		return shopItems;
 	}
+
+	public boolean isAdultQuery(Map<String, Object> params) {
+		StreamSource ss = apiCaller.getAdultApiStreamSource(params);
+		AdultResult adultResult = (AdultResult) unmarshaller.unmarshal(ss);
+		if(adultResult.getItem().getAdult()==ADULT_QUERY){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public StreamSource naverApiStream(Map<String, Object> params) {
+		return apiCaller.getShopApiStreamSource(params);
+	}
 	
+	public void printSource(StreamSource ss){
+		try{
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer();
+			transformer.transform(ss,result);
+			String strResult = writer.toString();
+			System.out.println(strResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

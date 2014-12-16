@@ -10,6 +10,8 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.l3cache.app.PostManager;
+import org.l3cache.dao.AdultResult;
+import org.l3cache.dao.Item;
 import org.l3cache.dao.ShopItems;
 import org.l3cache.init.InitDatabase;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -50,7 +52,8 @@ public class ApplicationConfig {
 	public ApiCaller naverApiCaller(){
 		ApiCaller call = new ApiCaller(restTemplate());
 		call.setApiKey(env.getRequiredProperty("naver.shop.key"));
-		call.setApiUrl(env.getRequiredProperty("naver.shop.url"));
+		call.setShopApiUrl(env.getRequiredProperty("naver.shop.url"));
+		call.setAdultApiUrl(env.getRequiredProperty("naver.adult.url"));
 		return call;
 	}
 	
@@ -62,7 +65,7 @@ public class ApplicationConfig {
 	@Bean
 	public Jaxb2Marshaller jaxb2Marshaller(){
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setClassesToBeBound(ShopItems.class);
+		jaxb2Marshaller.setClassesToBeBound(ShopItems.class, Item.class, AdultResult.class);
 		return jaxb2Marshaller;
 	}
 	

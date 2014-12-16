@@ -11,17 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PostManager {
-	private static final int SQL_SUCCESS = 1;
+	private static final int RECOMMENDATION_LISTS = 0;
+	private static final int RECENT_LISTS = 1;
+	private static final int POPULAR_LISTS = 2;
+	
 	private SqlSession sqlSession;
 	private static final Logger log = LoggerFactory
 			.getLogger(PostManager.class);
-
+	
+	
 	public PostManager(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
 
 	public List<Post> getRecentlyLists(int start, int uid) {
-		start = (start -1) * 20;
+		start = (start - 1) * 20;
 		PostSel postSel = new PostSel(start, uid);
 		return sqlSession.selectList("PostMapper.selectRecentlyList", postSel);
 	}
@@ -30,25 +34,16 @@ public class PostManager {
 		return sqlSession.selectOne("PostMapper.selectOnePost", pid);
 	}
 
-	public boolean savePost(WritePost post) {
-		if (sqlSession.insert("PostMapper.create", post) == SQL_SUCCESS) {
-			return true;
-		}
-		return false;
+	public void savePost(WritePost post) {
+		sqlSession.insert("PostMapper.create", post);
 	}
 
-	public boolean updateWithImage(WritePost post) {
-		if (sqlSession.update("PostMapper.updateWithImage", post) == SQL_SUCCESS) {
-			return true;
-		}
-		return false;
+	public void updateWithImage(WritePost post) {
+		sqlSession.update("PostMapper.updateWithImage", post);
 	}
 
-	public boolean updateWithoutImage(WritePost post) {
-		if (sqlSession.update("PostMapper.updateWithoutImage", post) == SQL_SUCCESS) {
-			return true;
-		}
-		return false;
+	public void updateWithoutImage(WritePost post) {
+		sqlSession.update("PostMapper.updateWithoutImage", post);
 	}
 
 	public String getPostImageFilePath(long pid) {
@@ -64,49 +59,31 @@ public class PostManager {
 		return true;
 	}
 
-	public boolean deletePost(long pid, int uid) {
+	public void deletePost(long pid, int uid) {
 		PostId postId = new PostId(pid, uid);
-		if (sqlSession.delete("PostMapper.deletePost", postId) == SQL_SUCCESS) {
-			return true;
-		}
-
-		return false;
+		sqlSession.delete("PostMapper.deletePost", postId);
 	}
 
-	public boolean likePost(long pid, int uid) {
+	public void likePost(long pid, int uid) {
 		PostId postId = new PostId(pid, uid);
-		if (sqlSession.insert("PostMapper.likePost", postId) == SQL_SUCCESS) {
-			log.debug("like PostId ={} UserId ={}", pid, uid);
-			return true;
-		}
-		return false;
+		sqlSession.insert("PostMapper.likePost", postId);
 	}
 
-	public boolean unlikePost(long pid, int uid) {
+	public void unlikePost(long pid, int uid) {
 		PostId postId = new PostId(pid, uid);
-		if (sqlSession.delete("PostMapper.unlikePost", postId) == SQL_SUCCESS) {
-			log.debug("Unlike PostId ={} UserId ={}", pid, uid);
-			return true;
-		}
-		return false;
+		sqlSession.delete("PostMapper.unlikePost", postId);
 	}
 
-	public boolean readPost(long pid) {
-		if (sqlSession.update("PostMapper.readPost", pid) == SQL_SUCCESS) {
-			return true;
-		}
-		return false;
+	public void readPost(long pid) {
+		sqlSession.update("PostMapper.readPost", pid);
 	}
 
 	public int getTotalRows() {
-		
-		int total = sqlSession.selectOne("PostMapper.foundRows");
-		System.out.println("total rows = " +total);
-		return total;
+		return sqlSession.selectOne("PostMapper.foundRows");
 	}
 
 	public List<Post> getUserPostsList(int uid, int start) {
-		start = (start -1) * 20;
+		start = (start - 1) * 20;
 		PostSel postSel = new PostSel(start, uid);
 		return sqlSession.selectList("PostMapper.selectUserPostsList", postSel);
 	}
@@ -119,10 +96,28 @@ public class PostManager {
 		return sqlSession.selectOne("PostMapper.countUserLikesList", uid);
 	}
 
-	public Object getUserLikesList(int uid, int start) {
-		start = (start -1) * 20;
+	public List<Post> getUserLikesList(int uid, int start) {
+		start = (start - 1) * 20;
 		PostSel postSel = new PostSel(start, uid);
 		return sqlSession.selectList("PostMapper.selectUserLikesList", postSel);
+	}
+
+	public Object getPostsLists(int start, int id, int sort) {
+		if(start<1 || id <1){
+			throw new IllegalArgumentException();
+		}
+		
+		switch (sort) {
+		case RECOMMENDATION_LISTS:
+			return getRecentlyLists(start, id);
+		case RECENT_LISTS:
+			return getRecentlyLists(start, id);
+		case POPULAR_LISTS:
+			return getRecentlyLists(start, id);
+
+		default:
+			return getRecentlyLists(start, id);
+		}
 	}
 
 }
