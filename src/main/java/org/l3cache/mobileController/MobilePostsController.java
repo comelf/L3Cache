@@ -135,7 +135,7 @@ public class MobilePostsController {
 		if(post.isValidated()){
 			return Status.argument_Error();
 		}
-		postManager.savePost(post);
+		postManager.updateWithoutImage(post);
 		return Status.success();		
 	}
 
