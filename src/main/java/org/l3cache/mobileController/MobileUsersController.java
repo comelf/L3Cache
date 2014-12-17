@@ -1,7 +1,8 @@
-package org.l3cache.app;
+package org.l3cache.mobileController;
 
 import org.apache.ibatis.session.SqlSession;
-import org.l3cache.dao.Response;
+import org.l3cache.dto.Response;
+import org.l3cache.dto.Status;
 import org.l3cache.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,9 @@ import core.utils.ResultCode;
 
 @RestController
 @RequestMapping("/app/users")
-public class MobileAppUsersController {
+public class MobileUsersController {
 	private static final Logger log = LoggerFactory
-			.getLogger(MobileAppUsersController.class);
+			.getLogger(MobileUsersController.class);
 
 	private static final int STARTING_COUNT = 1;
 	

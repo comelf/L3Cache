@@ -8,13 +8,13 @@ import net.sf.ehcache.Element;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.l3cache.support.EHCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import core.config.ApplicationConfig;
-import core.search.EHCacheService;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;

@@ -9,11 +9,15 @@ import net.sf.ehcache.CacheManager;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.l3cache.app.PostManager;
-import org.l3cache.dao.AdultResult;
-import org.l3cache.dao.Item;
-import org.l3cache.dao.ShopItems;
+import org.l3cache.dao.PostManager;
+import org.l3cache.dto.AdultResult;
+import org.l3cache.dto.Item;
+import org.l3cache.dto.ShopItems;
 import org.l3cache.init.InitDatabase;
+import org.l3cache.support.ApiCaller;
+import org.l3cache.support.EHCacheService;
+import org.l3cache.support.FileManager;
+import org.l3cache.support.SearchHelper;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +31,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import core.search.ApiCaller;
-import core.search.EHCacheService;
-import core.search.SearchHelper;
-import core.utils.FileManager;
 
 @Configuration
 @PropertySource(value = "classpath:application-properties.xml")

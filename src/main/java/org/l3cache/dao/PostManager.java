@@ -1,4 +1,4 @@
-package org.l3cache.app;
+package org.l3cache.dao;
 
 import java.util.List;
 

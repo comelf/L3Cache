@@ -1,9 +1,13 @@
-package org.l3cache.app;
+package org.l3cache.mobileController;
 
 import javax.servlet.http.HttpSession;
 
-import org.l3cache.dao.Response;
+import org.l3cache.dao.PostManager;
+import org.l3cache.dto.Response;
+import org.l3cache.dto.Status;
 import org.l3cache.model.WritePost;
+import org.l3cache.support.FileAccessException;
+import org.l3cache.support.FileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.NestedServletException;
 
-import core.utils.FileAccessException;
-import core.utils.FileManager;
 import core.utils.ResultCode;
 
 @RestController
 @RequestMapping("/app/posts")
-public class MobileAppPostsController {
+public class MobilePostsController {
 	private static final Logger log = LoggerFactory
-			.getLogger(MobileAppPostsController.class);
+			.getLogger(MobilePostsController.class);
 	private static final String localhost = "http://125.209.199.221:8080";
 	private static final int STARTING_COUNT = 1;
 	
@@ -58,7 +60,7 @@ public class MobileAppPostsController {
 	}
 
 	@RequestMapping(value = "/new")
-	public String newPost(@RequestParam("title") String title,
+	public Status newPost(@RequestParam("title") String title,
 						  @RequestParam("shopUrl") String shopUrl,
 						  @RequestParam("contents") String contents,
 						  @RequestParam("image") MultipartFile image,
@@ -67,14 +69,14 @@ public class MobileAppPostsController {
 						  HttpSession session) {
 
 		if (!fileManager.isValidatedFile(image)) {
-			return "redirect:/app/posts/error";
+			return Status.error();
 		}
 
 		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
 		String fileName = fileManager.saveFile(image, uploadPath);
 		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
 		postManager.savePost(post);
-		return "redirect:/app/posts/success";
+		return Status.success();
 
 	}
 
@@ -91,21 +93,12 @@ public class MobileAppPostsController {
 			return Status.argument_Error();
 		}
 		postManager.savePost(post);
-		return Status.success();		
+		return Status.success();	
 	}
 
-	@RequestMapping("/success")
-	public Status postSuccess() {
-		return Status.success();
-	}
-
-	@RequestMapping("/error")
-	public Status postError(Model model) {
-		return Status.error();
-	}
 
 	@RequestMapping("/edit/{pid}")
-	public String editPost(@PathVariable("pid") long pid,
+	public Status editPost(@PathVariable("pid") long pid,
 						   @RequestParam("title") String title,
 						   @RequestParam("shopUrl") String shopUrl,
 						   @RequestParam("contents") String contents,
@@ -115,7 +108,7 @@ public class MobileAppPostsController {
 						   HttpSession session) {
 
 		if (!fileManager.isValidatedFile(image) || !postManager.isExistentPost(pid)) {
-			return "redirect:/app/posts/error";
+			return Status.argument_Error();
 		}
 
 		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
@@ -124,7 +117,7 @@ public class MobileAppPostsController {
 
 		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
 		postManager.updateWithImage(post);
-		return "redirect:/app/posts/success";
+		return Status.success();
 	}
 	
 	@RequestMapping(value = "/editurl/{pid}")
@@ -152,20 +145,20 @@ public class MobileAppPostsController {
 
 	@RequestMapping(value = "/like", method = { RequestMethod.POST, RequestMethod.GET })
 	public Status likePost(@RequestParam("pid") long pid,
-							 @RequestParam("uid") int uid, Model model) {
+							 @RequestParam("uid") int uid) {
 		postManager.likePost(pid, uid);
 		return Status.success();
 	}
 
 	@RequestMapping(value = "/like", method = { RequestMethod.DELETE, RequestMethod.GET })
 	public Status unlikePost(@RequestParam("pid") long pid,
-			@RequestParam("uid") int uid, Model model) {
+			@RequestParam("uid") int uid) {
 		postManager.unlikePost(pid, uid);
 		return Status.success();
 	}
 
 	@RequestMapping(value = "/{pid}/read", method = { RequestMethod.POST, RequestMethod.GET })
-	public Status readPost(@PathVariable("pid") long pid, Model model) {
+	public Status readPost(@PathVariable("pid") long pid) {
 		postManager.readPost(pid);
 		return Status.success();
 	}

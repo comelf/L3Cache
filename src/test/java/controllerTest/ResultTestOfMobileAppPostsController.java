@@ -2,7 +2,7 @@ package controllerTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.l3cache.app.MobileAppPostsController;
+import org.l3cache.mobileController.MobilePostsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,7 +27,7 @@ public class ResultTestOfMobileAppPostsController {
 
 	@Before
 	public void setup() throws Exception {
-		RestAssuredMockMvc.standaloneSetup(new MobileAppPostsController());
+		RestAssuredMockMvc.standaloneSetup(new MobilePostsController());
 	}
 	
 	

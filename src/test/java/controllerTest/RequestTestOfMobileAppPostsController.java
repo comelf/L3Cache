@@ -2,7 +2,7 @@ package controllerTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.l3cache.app.MobileAppPostsController;
+import org.l3cache.mobileController.MobilePostsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -27,6 +27,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static com.jayway.restassured.RestAssured.given;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,7 +40,7 @@ public class RequestTestOfMobileAppPostsController {
 	private MockMvc mockMvc;
 	
 	@Autowired
-	MobileAppPostsController mobileAppPostsControllerMock;
+	MobilePostsController mobileAppPostsControllerMock;
 	
 
 	@Before

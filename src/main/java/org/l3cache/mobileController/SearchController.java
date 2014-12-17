@@ -1,20 +1,17 @@
-package org.l3cache.search;
+package org.l3cache.mobileController;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.UnmarshalException;
-
-import org.l3cache.app.Status;
-import org.l3cache.dao.Response;
+import org.l3cache.dto.Response;
+import org.l3cache.support.EHCacheService;
+import org.l3cache.support.QueryValidator;
+import org.l3cache.support.SearchHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.UnmarshallingFailureException;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import core.search.ApiCaller;
-import core.search.EHCacheService;
-import core.search.QueryValidator;
-import core.search.SearchHelper;
 import core.utils.ResultCode;
 
 @RestController
@@ -38,9 +31,6 @@ public class SearchController {
 	
 	@Autowired
 	SearchHelper searchHelper;
-	
-	@Resource(name="naverApiCaller")
-	ApiCaller apiCaller;
 	
 	@Autowired
 	EHCacheService ehCacheService;
@@ -87,7 +77,7 @@ public class SearchController {
 	@ExceptionHandler(UnmarshallingFailureException.class)
 	public ModelAndView unmarshallingFailureException(Exception e){
 		log.debug("[DEBUG] {}",e.getMessage());
-		return new ModelAndView("UnmarshallingFailureException").addObject("result", ResultCode.ARGUMENT_ERROR);
+		return new ModelAndView("UnmarshallingFailureException").addObject("result", ResultCode.API_ERROR);
 	}
 	
 	

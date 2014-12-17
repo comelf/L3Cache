@@ -1,21 +1,19 @@
-package core.search;
+package org.l3cache.support;
 
 import java.util.Map;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
-import org.l3cache.dao.Response;
-import org.l3cache.dao.SearchResult;
-import org.l3cache.dao.ShopItems;
+import org.l3cache.dto.Response;
+import org.l3cache.dto.SearchResult;
+import org.l3cache.dto.ShopItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import core.utils.ResultCode;
 
-@Service
 public class EHCacheService {
 	private static final Logger log = LoggerFactory.getLogger(EHCacheService.class);
 

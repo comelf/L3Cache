@@ -2,9 +2,8 @@ package postsApiTest;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.l3cache.support.FileManager;
 import org.springframework.mock.web.MockMultipartFile;
-
-import core.utils.FileManager;
 
 public class FileManagerTest {
 

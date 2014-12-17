@@ -1,4 +1,4 @@
-package core.search;
+package org.l3cache.support;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -8,8 +8,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.l3cache.dao.AdultResult;
-import org.l3cache.dao.ShopItems;
+import org.l3cache.dto.AdultResult;
+import org.l3cache.dto.ShopItems;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 public class SearchHelper {

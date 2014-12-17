@@ -1,4 +1,4 @@
-package org.l3cache.dao;
+package org.l3cache.dto;
 
 import core.utils.ResultCode;
 

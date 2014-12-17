@@ -1,18 +1,16 @@
-package org.l3cache.dao;
+package org.l3cache.dto;
 
 import java.util.List;
-
-import org.l3cache.model.Post;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(value="data")
-public class PostsResult {
+public class SearchResult {
 	private int start;
 	private int total;
-	private List<Post> list;
+	private List<Item> list;
 	
-	public PostsResult(int start, int total, List<Post> list) {
+	public SearchResult(int start, int total, List<Item> list) {
 		this.start = start;
 		this.total = total;
 		this.list = list;
@@ -30,10 +28,10 @@ public class PostsResult {
 	public void setStart(int start) {
 		this.start = start;
 	}	
-	public List<Post> getList() {
+	public List<Item> getList() {
 		return list;
 	}
-	public void setList(List<Post> list) {
+	public void setList(List<Item> list) {
 		this.list = list;
 	}
 	

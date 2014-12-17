@@ -34,9 +34,8 @@
 				P.imgUrl as imgUrl, 
 				P.price as price, 
 				P.writeDate as writeDate, 
-				P.post_read as read,
+				P.post_read as readCount,
 				U.email as writer, 
-				P.read as readCount, 
 				count(L.L3_POSTS_post_id) AS numLike 
 		from L3_POSTS AS P
             LEFT JOIN L3_USERS AS U
@@ -51,11 +50,11 @@
 	
 	
 	<update id="updateWithImage">
-		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{pid}
+		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, imgUrl=#{imgUrl}, price=#{price} where post_id =#{writer}
 	</update>
 	
 	<update id="updateWithoutImage">
-		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, price=#{price} where post_id =#{pid}
+		update L3_POSTS set title=#{title}, shopUrl=#{shopUrl}, contents=#{contents}, price=#{price} where post_id =#{writer}
 	</update>
 	
 	<delete id="deletePost">

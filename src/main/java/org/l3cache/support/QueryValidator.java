@@ -1,4 +1,4 @@
-package core.search;
+package org.l3cache.support;
 
 public class QueryValidator {
 

@@ -1,4 +1,4 @@
-package core.utils;
+package org.l3cache.support;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,15 +35,15 @@ public class FileManager {
 					originName.length());
 			UUID uuid = UUID.randomUUID();
 			String fileName = uuid.toString().replace("-", "")+ lastName;
-			File file = new File(uploadPath + File.separator + fileName);
-			image.transferTo(file);
+			File newfile = new File(uploadPath + File.separator + fileName);
+			image.transferTo(newfile);
 
 			File before = new File(beforeFile);
 
 			if (before.isFile()) {
 				before.delete();
 			}
-			image.transferTo(file);
+			
 			return fileName;
 		} catch (IllegalStateException | IOException e) {
 			log.debug("파일 저장 오류 = {}",e.toString());
