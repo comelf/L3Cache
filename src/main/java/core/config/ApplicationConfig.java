@@ -9,14 +9,17 @@ import net.sf.ehcache.CacheManager;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.l3cache.dao.PostManager;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.l3cache.dto.AdultResult;
 import org.l3cache.dto.Item;
 import org.l3cache.dto.ShopItems;
 import org.l3cache.init.InitDatabase;
 import org.l3cache.support.ApiCaller;
-import org.l3cache.support.EHCacheService;
-import org.l3cache.support.FileManager;
 import org.l3cache.support.SearchHelper;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -77,22 +80,6 @@ public class ApplicationConfig {
 	public Cache cache(){
 		return cacheManager().getCache("naverApiCache");
 	}
-	 
-	@Bean
-	public EHCacheService ehCacheService(){
-		return new EHCacheService(searchHelper(),cache());
-	}
-	
-//	@Bean
-//	public DataSource dataSource() {
-//		BasicDataSource ds = new BasicDataSource();
-//		ds.setDriverClassName(env
-//				.getRequiredProperty("database.driverClassName"));
-//		ds.setUrl(env.getRequiredProperty("database.url"));
-//		ds.setUsername(env.getRequiredProperty("database.username"));
-//		ds.setPassword(env.getRequiredProperty("database.password"));
-//		return ds;
-//	}
 	
 	@Bean
 	public DataSource dataSource() {
@@ -105,7 +92,6 @@ public class ApplicationConfig {
 		
 		return ds;
 	}
-	
 	
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
@@ -129,18 +115,19 @@ public class ApplicationConfig {
 	}
 	
 	@Bean
-	public PostManager postManager() throws Exception {
-		return new PostManager(sqlSession());
-	}
-	
-	@Bean
-	public FileManager fileManager() {
-		return new FileManager();
-	}
-	
-	@Bean
 	public InitDatabase initDatabase() {
 		return new InitDatabase();
 	}
 	
+	@Bean
+	public Recommender recommender() {
+		JDBCDataModel dataModel = new MySQLJDBCDataModel(dataSource(), 
+				env.getRequiredProperty("recommander.preferenceTable"),
+				env.getRequiredProperty("recommander.userIDColumn") , 
+				env.getRequiredProperty("recommander.itemIDColumn"), 
+				env.getRequiredProperty("recommander.preferenceColumn"), 
+				env.getRequiredProperty("recommander.timestampColumn")); 
+		ItemSimilarity similarity = new LogLikelihoodSimilarity(dataModel);
+		return new GenericBooleanPrefItemBasedRecommender(dataModel, similarity);
+	}
 }

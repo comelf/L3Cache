@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class AdminController {
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(AdminController.class);
 
 	@RequestMapping("/")
 	public String home() {
-		log.debug("HELLO!");
+		LOG.debug("HELLO!");
 		return "home";
 	}
 

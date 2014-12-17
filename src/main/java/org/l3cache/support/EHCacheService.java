@@ -10,22 +10,26 @@ import org.l3cache.dto.SearchResult;
 import org.l3cache.dto.ShopItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import core.utils.ResultCode;
 
+@Service
 public class EHCacheService {
-	private static final Logger log = LoggerFactory.getLogger(EHCacheService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EHCacheService.class);
 
 	private static final int DISPLAY_COUNT = 20;
 	
+	@Autowired
 	SearchHelper searchHelper;
 	
+	@Autowired
 	Cache cache;
 	
-	public EHCacheService(SearchHelper searchHelper, Cache cache) {
-		this.searchHelper = searchHelper;
-		this.cache = cache;
+	public EHCacheService() {
+		
 	}
 
 	public Response getResponse(Map<String, Object> params) {
@@ -33,10 +37,10 @@ public class EHCacheService {
 		Element ele = cache.get(key);
 		
 		if(ele != null){
-			log.debug("return Cashed Api ( key ={})",key);
+			LOG.debug("return Cashed Api ( key ={})",key);
 			return (Response) ele.getObjectValue();
 		}else{
-			log.debug("return non Cashed Api ( key ={})",key);
+			LOG.debug("return non Cashed Api ( key ={})",key);
 			return naverApiToResponse(params);
 		}
 	}
@@ -48,7 +52,7 @@ public class EHCacheService {
 		int total = si.getChannel().getTotal();
 		
 		if(total==0){
-			return Response.result_Zero();
+			return Response.resultZero();
 		}else if(total<=20){
 			Response response = new Response(ResultCode.SUCCESS);
 			SearchResult result = new SearchResult(start, total, si.getChannel().getItem().subList(0, total));
@@ -89,7 +93,7 @@ public class EHCacheService {
 			
 			Element element = new Element(key, response);
 			cache.put(element);
-			log.debug("Api Cashe ( key ={})",key);
+			LOG.debug("Api Cashe ( key ={})",key);
 		}
 	}
 

@@ -21,7 +21,7 @@ import core.utils.ResultCode;
 @RestController
 @RequestMapping("/app/users")
 public class MobileUsersController {
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(MobileUsersController.class);
 
 	private static final int STARTING_COUNT = 1;
@@ -34,7 +34,7 @@ public class MobileUsersController {
 						  @RequestParam(value = "password") String password) {
 		
 		if(sqlSession.selectOne("UserMapper.findByEmail", email) != null){
-			return Status.email_duplication();
+			return Status.emailDuplication();
 		}
 
 		User user = new User(email, password);
@@ -48,12 +48,12 @@ public class MobileUsersController {
 		
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
 		if(user==null){
-			return Status.email_error();
+			return Status.emailError();
 		}
 		
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		if(!user.matchPassword(matchPass)){
-			return Status.password_error();
+			return Status.passwordError();
 		}
 		
 		return Status.successAndLogin(user.getUserId());
@@ -65,12 +65,12 @@ public class MobileUsersController {
 		
 		User user = sqlSession.selectOne("UserMapper.findByEmail", email);
 		if(user==null){
-			return Status.email_error();
+			return Status.emailError();
 		}
 		
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		if(!user.matchPassword(matchPass)){
-			return Status.password_error();
+			return Status.passwordError();
 		}
 		
 		sqlSession.delete("UserMapper.deleteUserByEmail", email);
@@ -85,7 +85,7 @@ public class MobileUsersController {
 		
 		User user = sqlSession.selectOne("UserMapper.findByUid", uid);
 		if(user == null){
-			return Response.email_error();
+			return Response.emailError();
 		}
 		
 		Response response = Response.success();
@@ -104,12 +104,12 @@ public class MobileUsersController {
 		
 		User user = sqlSession.selectOne("UserMapper.findByUidwithPassword", uid);
 		if(user == null){
-			return Response.email_error();
+			return Response.emailError();
 		}
 		
 		String matchPass = sqlSession.selectOne("UserMapper.findPassword", password);
 		if(user.matchPassword(matchPass)){
-			return Response.password_error();
+			return Response.passwordError();
 		}
 		
 		user.setEmail(email);
@@ -121,7 +121,7 @@ public class MobileUsersController {
 	
 	@ExceptionHandler(value={ NestedServletException.class, IllegalArgumentException.class})
 	public ModelAndView exceptionHandler(Exception e) {
-		log.error("NestedServletException : ", e.toString());
+		LOG.error("NestedServletException : ", e.toString());
 		return new ModelAndView("NestedServletException").addObject("status",ResultCode.ERROR);
 	}
 }

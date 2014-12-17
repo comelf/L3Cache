@@ -103,6 +103,8 @@ public class WritePost {
 		if(this.imgUrl.isEmpty()){
 			return false;
 		}
+		
+		
 		if(this.price<=0){
 			return false;
 		}

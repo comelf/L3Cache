@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 public class InitDatabase {
 
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(InitDatabase.class);
 	
 	@Autowired
@@ -23,6 +23,6 @@ public class InitDatabase {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource("l3cache.sql"));
 		DatabasePopulatorUtils.execute(populator, dataSource);
-		log.info("database initialized success!");
+		LOG.info("database initialized success!");
 	}
 }

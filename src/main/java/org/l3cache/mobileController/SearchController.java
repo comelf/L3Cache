@@ -26,7 +26,7 @@ import core.utils.ResultCode;
 @RestController
 @RequestMapping("/search")
 public class SearchController {
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(SearchController.class);
 	
 	@Autowired
@@ -50,7 +50,7 @@ public class SearchController {
 		Map<String, Object> adultParams = new HashMap<String, Object>();
 		adultParams.put("query", query);
 		if(searchHelper.isAdultQuery(adultParams)){
-			return Response.adult_Query();
+			return Response.adultQuery();
 		}
 		
 		Map<String, Object> searchParams = new HashMap<String, Object>();
@@ -64,19 +64,19 @@ public class SearchController {
 	
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ModelAndView illegalArgument(Exception e){
-		log.debug("[DEBUG] {}",e.getMessage());
+		LOG.debug("[DEBUG] {}",e.getMessage());
 		return new ModelAndView("MissingServletRequestParameterException").addObject("result", ResultCode.ARGUMENT_ERROR);
 	}
 	
 	@ExceptionHandler(value={ NullPointerException.class, IllegalArgumentException.class})
 	public ModelAndView exception(Exception e) {
-		log.debug("[DEBUG] {}",e.getMessage());
+		LOG.debug("[DEBUG] {}",e.getMessage());
 		return new ModelAndView("IllegalArgumentException").addObject("result", ResultCode.ERROR);
 	}
 	
 	@ExceptionHandler(UnmarshallingFailureException.class)
 	public ModelAndView unmarshallingFailureException(Exception e){
-		log.debug("[DEBUG] {}",e.getMessage());
+		LOG.debug("[DEBUG] {}",e.getMessage());
 		return new ModelAndView("UnmarshallingFailureException").addObject("result", ResultCode.API_ERROR);
 	}
 	

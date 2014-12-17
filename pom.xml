@@ -113,6 +113,17 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Mahout -->
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>0.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-integration</artifactId>
+			<version>0.9</version>
+		</dependency>
 
 		<!-- Logging with SLF4J & LogBack -->
 		<dependency>

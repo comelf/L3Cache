@@ -34,15 +34,15 @@ public class Status {
 		return  new Status(ResultCode.ERROR);
 	}
 
-	public static Status email_duplication() {
+	public static Status emailDuplication() {
 		return  new Status(ResultCode.EMAIL_DUPLICTION);
 	}
 
-	public static Status email_error() {
+	public static Status emailError() {
 		return  new Status(ResultCode.EMAIL_ERROR);
 	}
 
-	public static Status password_error() {
+	public static Status passwordError() {
 		return  new Status(ResultCode.PASSWORD_ERROR);
 	}
 
@@ -52,7 +52,7 @@ public class Status {
 		return status;
 	}
 
-	public static Status argument_Error() {
+	public static Status argumentError() {
 		return new Status(ResultCode.ARGUMENT_ERROR);
 	}
 

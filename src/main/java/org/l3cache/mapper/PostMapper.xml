@@ -22,6 +22,31 @@
 			ON P.post_id = L.L3_POSTS_post_id group by P.post_id order by P.writeDate DESC, P.post_id DESC LIMIT #{start},20	
 	</select>
 	
+	<select id="selectRecommendedLists" resultType="post">
+		select 	P.post_id as pid, 
+				P.title as title, 
+				P.shopUrl as shopUrl,
+				P.contents as contents,
+				P.imgUrl as imgUrl, 
+				P.price as price, 
+				P.writeDate as writeDate, 
+				P.post_read as readCount,
+				U.email as writer, 
+				count(L.L3_POSTS_post_id) as numLike
+		from L3_POSTS AS P
+            LEFT JOIN L3_USERS AS U
+			ON P.write_user_id = U.user_id
+			LEFT JOIN LIKE_POSTS AS L
+			ON P.post_id = L.L3_POSTS_post_id 
+			where P.post_id  in  
+			<foreach item="postIDList" index="index" collection="list"
+      			open="(" separator="," close=")">
+        		#{postIDList}
+  			</foreach>
+  			group by P.post_id order by P.writeDate DESC, P.post_id DESC 
+	</select> 
+	
+	
 	<insert id="create">
 		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer})
 	</insert>

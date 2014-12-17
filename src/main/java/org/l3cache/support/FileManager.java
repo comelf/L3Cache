@@ -6,10 +6,12 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+@Component
 public class FileManager {
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(FileManager.class);
 
 	public String saveFile(MultipartFile image, String uploadPath) {
@@ -23,7 +25,7 @@ public class FileManager {
 			image.transferTo(file);
 			return fileName;
 		}catch (IllegalStateException | IOException e){
-			log.debug("파일 저장 오류 = {}",e.toString());
+			LOG.debug("파일 저장 오류 = {}",e.toString());
 			throw new FileAccessException(e);
 		}
 	}
@@ -47,7 +49,7 @@ public class FileManager {
 			
 			return fileName;
 		} catch (IllegalStateException | IOException e) {
-			log.debug("파일 저장 오류 = {}",e.toString());
+			LOG.debug("파일 저장 오류 = {}",e.toString());
 			throw new FileAccessException(e);
 		}
 	}
@@ -60,7 +62,7 @@ public class FileManager {
 		}
 		if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName
 				.endsWith(".png"))) {
-			log.debug("허용되지 않은 이미지 파일 = {}",image.getOriginalFilename());
+			LOG.debug("허용되지 않은 이미지 파일 = {}",image.getOriginalFilename());
 			return false;
 		}
 

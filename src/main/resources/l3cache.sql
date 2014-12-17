@@ -52,11 +52,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `L3CACHE`.`LIKE_POSTS`
 -- -----------------------------------------------------
---DROP TABLE IF EXISTS `L3CACHE`.`LIKE_POSTS` ;
+DROP TABLE IF EXISTS `L3CACHE`.`LIKE_POSTS` ;
 
 CREATE TABLE IF NOT EXISTS `L3CACHE`.`LIKE_POSTS` (
   `L3_USERS_user_id` INT NOT NULL,
   `L3_POSTS_post_id` BIGINT NOT NULL,
+  `preference` float DEFAULT 1,
   `likeDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`L3_USERS_user_id`, `L3_POSTS_post_id`),
   INDEX `fk_L3_USERS_has_L3_POSTS_L3_POSTS1_idx` (`L3_POSTS_post_id` ASC),
@@ -135,17 +136,17 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 --insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values('미생','http://openapi.naver.com/l?AAABWMSw7CIBQAT/NYkraPBrpg0R/3QHmUxkgR0YTbi8msJpl5fShXDfsCs4FFwb6CQpg2Vmoi/Q5XYg+qWspJCLJKikE4K63rnfIex5sgJQa0LGTyOpSSAGcYTOPfpjMePNovZX6/nk0ethCPIQKa0wFuqu+mEdu7+wFIA8kZiQAAAA==' ,'기면 기고 아니면 아닌거야!!!!!','http://shopping.phinf.naver.net/main_8109539/8109539440.2.jpg','9900',2);
 --
 --
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,3);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,5);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,2);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,1);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,3);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,1);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,2);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,4);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,1);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,12);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,3);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,20);
---insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,1);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,3);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,5);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,2);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(1,1);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,3);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,1);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,2);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,4);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,1);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,12);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(5,3);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(3,20);
+insert into LIKE_POSTS (L3_USERS_user_id, L3_POSTS_post_id) values(2,1);
 

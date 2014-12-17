@@ -27,9 +27,9 @@ import core.utils.ResultCode;
 @RestController
 @RequestMapping("/app/posts")
 public class MobilePostsController {
-	private static final Logger log = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(MobilePostsController.class);
-	private static final String localhost = "http://125.209.199.221:8080";
+	private static final String LOCALHOST = "http://125.209.199.221:8080";
 	private static final int STARTING_COUNT = 1;
 	
 	@Autowired
@@ -42,7 +42,7 @@ public class MobilePostsController {
 	public Response userBasePostsList(@RequestParam("id") int id,
 									  @RequestParam("start") int start, 
 									  @RequestParam("sort") int sort) {
-		log.info("[/app/posts/] request id = {}, start = {}, sort= {}", id, start, sort);
+		LOG.info("[/app/posts/] request id = {}, start = {}, sort= {}", id, start, sort);
 		
 		Response response = new Response(ResultCode.SUCCESS);
 		response.setTotal(postManager.getTotalRows());
@@ -52,7 +52,7 @@ public class MobilePostsController {
 
 	@RequestMapping("/{pid}")
 	public Response getPostDetail(@PathVariable("pid") long pid, Model model) {
-		log.info("[/app/{}/] request", pid);
+		LOG.info("[/app/{}/] request", pid);
 		
 		Response response = new Response(ResultCode.SUCCESS);
 		response.setData(postManager.getPostDetail(pid));
@@ -74,7 +74,7 @@ public class MobilePostsController {
 
 		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
 		String fileName = fileManager.saveFile(image, uploadPath);
-		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, writer);
+		WritePost post = new WritePost(title, shopUrl, contents, LOCALHOST+"/postsImages/" + fileName, price, writer);
 		postManager.savePost(post);
 		return Status.success();
 
@@ -90,7 +90,7 @@ public class MobilePostsController {
 		
 		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, writer);
 		if(!post.isValidated()){
-			return Status.argument_Error();
+			return Status.argumentError();
 		}
 		postManager.savePost(post);
 		return Status.success();	
@@ -107,17 +107,17 @@ public class MobilePostsController {
 						   @RequestParam("id") int writer,
 						   HttpSession session) {
 		
-		log.debug("postId = {}", pid);
+		LOG.debug("postId = {}", pid);
 		
 		if (!fileManager.isValidatedFile(image) || !postManager.isExistentPost(pid)) {
-			return Status.argument_Error();
+			return Status.argumentError();
 		}
 
 		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages/");
 		String beforeFile = postManager.getPostImageFilePath(pid);
 		String fileName = fileManager.saveAndRemoveFile(image, uploadPath, beforeFile);
 
-		WritePost post = new WritePost(pid, title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, writer);
+		WritePost post = new WritePost(pid, title, shopUrl, contents, LOCALHOST+"/postsImages/" + fileName, price, writer);
 		postManager.updateWithImage(post);
 		return Status.success();
 	}
@@ -133,7 +133,7 @@ public class MobilePostsController {
 		
 		WritePost post = new WritePost(pid, title, shopUrl, contents, imageUrl, price, writer);
 		if(post.isValidated()){
-			return Status.argument_Error();
+			return Status.argumentError();
 		}
 		postManager.updateWithoutImage(post);
 		return Status.success();		
@@ -195,7 +195,7 @@ public class MobilePostsController {
 	
 	@ExceptionHandler(value={ NestedServletException.class, FileAccessException.class, IllegalArgumentException.class})
 	public ModelAndView exceptionHandler(Exception e) {
-		log.error("NestedServletException : ", e.toString());
+		LOG.error("NestedServletException : ", e.toString());
 		return new ModelAndView("NestedServletException").addObject("status",ResultCode.ERROR);
 	}
 

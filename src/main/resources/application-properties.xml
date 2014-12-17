@@ -26,5 +26,12 @@
 	<entry key="mysql.url">jdbc:mysql://localhost:3306/L3CACHE</entry>
 	<entry key="mysql.username">l3cache</entry>
 	<entry key="mysql.password">l3C@cheDB!</entry>
+	
+	<!-- Mahout Recommendation -->
+	<entry key="recommander.preferenceTable">LIKE_POSTS</entry>
+	<entry key="recommander.userIDColumn">L3_USERS_user_id</entry>
+	<entry key="recommander.itemIDColumn">L3_POSTS_post_id</entry>
+	<entry key="recommander.preferenceColumn">preference</entry>
+	<entry key="recommander.timestampColumn">likeDate</entry>
     
 </properties>

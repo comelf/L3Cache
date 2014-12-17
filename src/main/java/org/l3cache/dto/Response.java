@@ -48,7 +48,7 @@ public class Response {
 		return new Response(ResultCode.SUCCESS);
 	}
 
-	public static Response arguemnt_error() {
+	public static Response arguemntError() {
 		return new Response(ResultCode.ARGUMENT_ERROR);
 	}
 
@@ -56,19 +56,19 @@ public class Response {
 		return new Response(ResultCode.ERROR);
 	}
 
-	public static Response email_error() {
+	public static Response emailError() {
 		return new Response(ResultCode.EMAIL_ERROR);
 	}
 
-	public static Response password_error() {
+	public static Response passwordError() {
 		return new Response(ResultCode.PASSWORD_ERROR);
 	}
 
-	public static Response adult_Query() {
+	public static Response adultQuery() {
 		return new Response(ResultCode.ADULT_QUERY);
 	}
 
-	public static Response result_Zero() {
+	public static Response resultZero() {
 		Response response = new Response(ResultCode.SUCCESS);
 		response.setMessage("검색결과 없음");
 		response.setTotal(0);
