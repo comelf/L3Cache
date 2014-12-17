@@ -4,25 +4,53 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("writePost")
 public class WritePost {
+	private long pid;
 	private String title;
 	private String shopUrl;
 	private String contents;
 	private String imgUrl;
 	private int price;
-	private long writer;
+	private int writer;
 	
 	public WritePost() {
 		
 	}
 	
 	public WritePost(String title, String shopUrl, String contents,
-			String imgUrl, int price, long id) {
+			String imgUrl, int price, int writer) {
 		this.title = title;
 		this.shopUrl = shopUrl;
 		this.contents = contents;
 		this.imgUrl = imgUrl;
 		this.price = price;
-		this.writer = id;
+		this.writer = writer;
+	}
+	
+	public WritePost(long pid, String title, String shopUrl, String contents,
+			String imgUrl, int price, int writer) {
+		this.pid = pid;
+		this.title = title;
+		this.shopUrl = shopUrl;
+		this.contents = contents;
+		this.imgUrl = imgUrl;
+		this.price = price;
+		this.pid = pid;
+	}
+	
+	public long getPid() {
+		return pid;
+	}
+
+	public void setPid(long pid) {
+		this.pid = pid;
+	}
+	
+	public int getWriter() {
+		return writer;
+	}
+
+	public void setWriter(int writer) {
+		this.writer = writer;
 	}
 
 	public String getTitle() {
@@ -65,22 +93,11 @@ public class WritePost {
 		this.price = price;
 	}
 
-	public long getId() {
-		return writer;
-	}
-
-	public void setId(int writer) {
-		this.writer = writer;
-	}
-
 	public boolean isValidated() {
 		if(this.title.isEmpty()){
 			return false;
 		}
 		if(this.shopUrl.isEmpty()){
-			return false;
-		}
-		if(this.contents.isEmpty()){
 			return false;
 		}
 		if(this.imgUrl.isEmpty()){

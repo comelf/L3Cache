@@ -23,6 +23,7 @@ public class FileManager {
 			image.transferTo(file);
 			return fileName;
 		}catch (IllegalStateException | IOException e){
+			log.debug("파일 저장 오류 = {}",e.toString());
 			throw new FileAccessException(e);
 		}
 	}
@@ -59,6 +60,7 @@ public class FileManager {
 		}
 		if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName
 				.endsWith(".png"))) {
+			log.debug("허용되지 않은 이미지 파일 = {}",image.getOriginalFilename());
 			return false;
 		}
 

@@ -1,11 +1,7 @@
 package org.l3cache.support;
 
-import java.io.StringWriter;
 import java.util.Map;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.l3cache.dto.AdultResult;
@@ -49,18 +45,18 @@ public class SearchHelper {
 		return apiCaller.getShopApiStreamSource(params);
 	}
 	
-	public void printSource(StreamSource ss){
-		try{
-			StringWriter writer = new StringWriter();
-			StreamResult result = new StreamResult(writer);
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Transformer transformer = tFactory.newTransformer();
-			transformer.transform(ss,result);
-			String strResult = writer.toString();
-			System.out.println(strResult);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public void printSource(StreamSource ss){
+//		try{
+//			StringWriter writer = new StringWriter();
+//			StreamResult result = new StreamResult(writer);
+//			TransformerFactory tFactory = TransformerFactory.newInstance();
+//			Transformer transformer = tFactory.newTransformer();
+//			transformer.transform(ss,result);
+//			String strResult = writer.toString();
+//			System.out.println(strResult);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

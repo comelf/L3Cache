@@ -65,7 +65,7 @@ public class MobilePostsController {
 						  @RequestParam("contents") String contents,
 						  @RequestParam("image") MultipartFile image,
 						  @RequestParam("price") int price, 
-						  @RequestParam("id") int id,
+						  @RequestParam("id") int writer,
 						  HttpSession session) {
 
 		if (!fileManager.isValidatedFile(image)) {
@@ -74,7 +74,7 @@ public class MobilePostsController {
 
 		String uploadPath = session.getServletContext().getRealPath("/WEB-INF/postsImages");
 		String fileName = fileManager.saveFile(image, uploadPath);
-		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
+		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, writer);
 		postManager.savePost(post);
 		return Status.success();
 
@@ -86,9 +86,9 @@ public class MobilePostsController {
 							   @RequestParam("contents") String contents,
 							   @RequestParam("image") String imageUrl,
 							   @RequestParam("price") int price, 
-							   @RequestParam("id") int id) {
+							   @RequestParam("id") int writer) {
 		
-		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
+		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, writer);
 		if(!post.isValidated()){
 			return Status.argument_Error();
 		}
@@ -104,9 +104,11 @@ public class MobilePostsController {
 						   @RequestParam("contents") String contents,
 						   @RequestParam("image") MultipartFile image,
 						   @RequestParam("price") int price, 
-						   @RequestParam("id") int id,
+						   @RequestParam("id") int writer,
 						   HttpSession session) {
-
+		
+		log.debug("postId = {}", pid);
+		
 		if (!fileManager.isValidatedFile(image) || !postManager.isExistentPost(pid)) {
 			return Status.argument_Error();
 		}
@@ -115,20 +117,21 @@ public class MobilePostsController {
 		String beforeFile = postManager.getPostImageFilePath(pid);
 		String fileName = fileManager.saveAndRemoveFile(image, uploadPath, beforeFile);
 
-		WritePost post = new WritePost(title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, id);
+		WritePost post = new WritePost(pid, title, shopUrl, contents, localhost+"/postsImages/" + fileName, price, writer);
 		postManager.updateWithImage(post);
 		return Status.success();
 	}
 	
 	@RequestMapping(value = "/editurl/{pid}")
-	public Status editPostWithUrl(@RequestParam("title") String title,
+	public Status editPostWithUrl(	@PathVariable("pid") long pid,
+								  	@RequestParam("title") String title,
 							  		@RequestParam("shopUrl") String shopUrl,
 							  		@RequestParam("contents") String contents,
 							  		@RequestParam("image") String imageUrl,
 							  		@RequestParam("price") int price, 
-							  		@RequestParam("id") int id) {
+							  		@RequestParam("id") int writer) {
 		
-		WritePost post = new WritePost(title, shopUrl, contents, imageUrl, price, id);
+		WritePost post = new WritePost(pid, title, shopUrl, contents, imageUrl, price, writer);
 		if(!post.isValidated()){
 			return Status.argument_Error();
 		}
