@@ -132,7 +132,7 @@ public class MobilePostsController {
 							  		@RequestParam("id") int writer) {
 		
 		WritePost post = new WritePost(pid, title, shopUrl, contents, imageUrl, price, writer);
-		if(!post.isValidated()){
+		if(post.isValidated()){
 			return Status.argument_Error();
 		}
 		postManager.savePost(post);
