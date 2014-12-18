@@ -13,7 +13,7 @@ assets
 <key>kind</key>
 <string>software-package</string>
 <key>url</key>
-<string>https://dl-web.dropbox.com/get/snapshop.ipa?_subject_uid=174820251&w=AACv3vasI1A4zJZRi74g5o3lMCKc2TKJsLkrQtLSlxKOeg&dl=1</string>
+<string>https://github.com/comelf/L3Cache/blob/master/webapp/WEB-INF/app/snapshop.ipa?raw=true</string>
 </dict>
 </array>
 <key>metadata</key>
