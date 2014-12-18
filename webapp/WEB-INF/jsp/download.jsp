@@ -25,7 +25,7 @@
     <div class="section" id="section2">
 	    <h1>SnapShop for iOS</h1>
 	    <p>iOS용 SnapShop 앱입니다.</p>
-	    <a href="/app/snapshop.plist"><p>다운로드</p></a>
+	    <a href="itms-services://?action=download-manifest&url=http://125.209.199.221:8080/12/app/snapshop.plist"><p>다운로드</p></a>
 	    <a href="https://github.com/lsj333610dl/2014-03-NEXT-RealProject-iOS.git"><p>Github</p></a>
     </div>
     <div class="section" id="section3">

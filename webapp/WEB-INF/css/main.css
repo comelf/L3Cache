@@ -24,7 +24,7 @@ html,body{
 } */
 
 h1{
-	font-size: 4em;
+	font-size: 6em;
 	font-family: arial,helvetica;
 	color: #38473e;
 	margin:0;
@@ -43,7 +43,7 @@ h1{
 
 p{
 	color: #38473e;
-	font-size: 2em;
+	font-size: 5em;
 	text-decoration: none;
 }
 
