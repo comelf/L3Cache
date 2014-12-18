@@ -25,13 +25,13 @@
     <div class="section" id="section2">
 	    <h1>SnapShop for iOS</h1>
 	    <p>iOS용 SnapShop 앱입니다.</p>
-	    <a href="#"><p>다운로드</p></a>
+	    <a href="/app/snapshop.ipa"><p>다운로드</p></a>
 	    <a href="https://github.com/lsj333610dl/2014-03-NEXT-RealProject-iOS.git"><p>Github</p></a>
     </div>
     <div class="section" id="section3">
 	    <h1>SnapShop for Android</h1>
 	    <p>안드로이드용 SnapShop 앱입니다.</p>
-	    <p>다운로드</p>
+	    <a href="/app/SnapShop.apk"><p>다운로드</p></a>
 	    <a href="https://github.com/Woonohyo/SnapShop.git"><p>Github</p></a>
 	    </div>
     <div class="section" id="section4">
