@@ -1,0 +1,65 @@
+/*
+html,body{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#wrap{
+	width: 100%;
+	height: 100%;
+	background-image: url('./images/iphone.png');
+	background-size: cover;
+}
+*/
+
+#section1,#section2,#section3,#section4{
+	
+	background-size: cover;
+}
+
+#section2{
+	background-image: url('/images/iphone.png');
+}
+
+h1{
+	font-size: 4em;
+	font-family: arial,helvetica;
+	color: #38473e;
+	margin:0;
+}
+
+#section2 h1{
+/* 	color: #444; */
+/* 	text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff; */
+}
+
+#section2 p{
+/* 	color: #444; */
+/* 	text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff; */
+}
+
+
+p{
+	color: #38473e;
+	font-size: 2em;
+	text-decoration: none;
+}
+
+a {
+  color: #38473e;
+  text-decoration: underline;
+}
+
+.section{
+	text-align: center;
+}
+
+#section1 h1{
+	color: #fff;
+}
+
+#section1 p{
+	color: #fff;
+}
