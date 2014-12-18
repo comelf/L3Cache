@@ -29,7 +29,6 @@ public class EHCacheService {
 	Cache cache;
 	
 	public EHCacheService() {
-		
 	}
 
 	public Response getResponse(Map<String, Object> params) {

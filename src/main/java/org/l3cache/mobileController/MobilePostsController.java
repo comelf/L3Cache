@@ -44,9 +44,7 @@ public class MobilePostsController {
 									  @RequestParam("sort") int sort) {
 		LOG.info("[/app/posts/] request id = {}, start = {}, sort= {}", id, start, sort);
 		
-		Response response = new Response(ResultCode.SUCCESS);
-		response.setTotal(postManager.getTotalRows());
-		response.setData(postManager.getPostsLists(start, id, sort));
+		Response response = postManager.getPostsLists(start, id, sort); 
 		return response;
 	}
 

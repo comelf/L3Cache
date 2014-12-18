@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.l3cache.dto.Response;
 import org.l3cache.model.Post;
 import org.l3cache.model.PostId;
 import org.l3cache.model.PostSel;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import core.utils.ResultCode;
 
 
 @Component
@@ -42,10 +45,14 @@ public class PostManager {
 //		this.recommander = recommander;
 //	}
 
-	public List<Post> getRecentlyLists(int start, int uid) {
+	public Response getRecentlyLists(int start, int uid) {
 		start = (start - 1) * 20;
 		PostSel postSel = new PostSel(start, uid);
-		return sqlSession.selectList("PostMapper.selectRecentlyList", postSel);
+		
+		Response response = Response.success();
+		response.setTotal(getTotalRows());
+		response.setData(sqlSession.selectList("PostMapper.selectRecentlyList", postSel));
+		return response;
 	}
 
 	public Post getPostDetail(long pid) {
@@ -120,14 +127,17 @@ public class PostManager {
 		return sqlSession.selectList("PostMapper.selectUserLikesList", postSel);
 	}
 
-	public List<Post> getPostsLists(int start, int id, int sort) {
+	public Response getPostsLists(int start, int id, int sort) {
+		
 		if(start<1 || id <1){
-			throw new IllegalArgumentException();
+			return Response.arguemntError();
 		}
+		
+		
 		
 		switch (sort) {
 		case RECOMMENDATION_LISTS:
-			return getRecommendedLists(start, id);
+			return getRecommendedLists(id);
 		case RECENT_LISTS:
 			return getRecentlyLists(start, id);
 		case POPULAR_LISTS:
@@ -138,12 +148,16 @@ public class PostManager {
 		}
 	}
 
-	public List<Post> getRecommendedLists(int start, int id) {
+	public Response getRecommendedLists(int id) {
+		
 		List<String> postIDList = getRecommendedPostIDList(id);
 		if(postIDList.isEmpty()){
-			return null;
+			return Response.resultZero();
 		}else{
-			return sqlSession.selectList("PostMapper.selectRecommendedLists", postIDList);
+			Response response = Response.success();
+			response.setTotal(postIDList.size());
+			response.setData(sqlSession.selectList("PostMapper.selectRecommendedLists", postIDList));
+			return response;
 		}
 	}
 
@@ -157,7 +171,7 @@ public class PostManager {
 			return postIDList;
 		} catch (TasteException e) {
 			LOG.debug("recommendations Fail!");
-			return null;
+			return new ArrayList<String>();
 		}
 	}
 
