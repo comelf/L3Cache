@@ -118,6 +118,12 @@
 			<groupId>org.apache.mahout</groupId>
 			<artifactId>mahout-core</artifactId>
 			<version>0.9</version>
+			<exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.mahout</groupId>
