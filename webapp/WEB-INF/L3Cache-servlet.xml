@@ -18,6 +18,7 @@
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**/" />
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
 	<mvc:resources location="/WEB-INF/fonts/" mapping="/fonts/**" />
+	<mvc:resources location="/WEB-INF/app/" mapping="/app/**" />
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:order="2"
