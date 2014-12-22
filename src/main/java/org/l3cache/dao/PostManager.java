@@ -45,16 +45,6 @@ public class PostManager {
 //		this.recommander = recommander;
 //	}
 
-	public Response getRecentlyLists(int start, int uid) {
-		start = (start - 1) * 20;
-		PostSel postSel = new PostSel(start, uid);
-		
-		Response response = Response.success();
-		response.setTotal(getTotalRows());
-		response.setData(sqlSession.selectList("PostMapper.selectRecentlyList", postSel));
-		return response;
-	}
-
 	public Post getPostDetail(long pid) {
 		return sqlSession.selectOne("PostMapper.selectOnePost", pid);
 	}
@@ -141,12 +131,33 @@ public class PostManager {
 		case RECENT_LISTS:
 			return getRecentlyLists(start, id);
 		case POPULAR_LISTS:
-			return getRecentlyLists(start, id);
+			return getPopularLists(start, id);
 
 		default:
 			return getRecentlyLists(start, id);
 		}
 	}
+	
+	public Response getRecentlyLists(int start, int uid) {
+		start = (start - 1) * 20;
+		PostSel postSel = new PostSel(start, uid);
+		
+		Response response = Response.success();
+		response.setTotal(getTotalRows());
+		response.setData(sqlSession.selectList("PostMapper.selectRecentlyList", postSel));
+		return response;
+	}
+	
+	private Response getPopularLists(int start, int uid) {
+		start = (start - 1) * 20;
+		PostSel postSel = new PostSel(start, uid);
+		
+		Response response = Response.success();
+		response.setTotal(getTotalRows());
+		response.setData(sqlSession.selectList("PostMapper.selectPopularList", postSel));
+		return response;
+	}
+
 
 	public Response getRecommendedLists(int id) {
 		

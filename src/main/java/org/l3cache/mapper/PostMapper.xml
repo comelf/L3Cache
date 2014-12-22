@@ -46,6 +46,26 @@
   			group by P.post_id order by P.writeDate DESC, P.post_id DESC 
 	</select> 
 	
+	<select id="selectPopularList" resultType="post">
+		select 	P.post_id as pid, 
+				P.title as title, 
+				P.shopUrl as shopUrl,
+				P.contents as contents,
+				P.imgUrl as imgUrl, 
+				P.price as price, 
+				P.writeDate as writeDate, 
+				P.post_read as readCount,
+				U.email as writer, 
+				count(L.L3_POSTS_post_id) as numLike,
+				sum(if(L.L3_USERS_user_id= #{uid}, 1, 0)) as userLike
+		from L3_POSTS AS P
+            LEFT JOIN L3_USERS AS U
+			ON P.write_user_id = U.user_id
+			LEFT JOIN LIKE_POSTS AS L
+			ON P.post_id = L.L3_POSTS_post_id 
+			where P.writeDate  > (CURRENT_DATE()-INTERVAL 7 DAY) group by P.post_id order by P.post_read DESC, P.writeDate DESC, P.post_id DESC LIMIT #{start},20	
+	</select>
+	
 	
 	<insert id="create">
 		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer})
