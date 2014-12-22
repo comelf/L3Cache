@@ -118,6 +118,43 @@ public class MobileUsersController {
 		return Response.success();
 	}
 	
+	@RequestMapping(value="/tpLike/{uid}", method=RequestMethod.GET)
+	public Response sumPriceWhenLike(@PathVariable("uid") int uid) {
+		if(uid < STARTING_COUNT){
+			return Response.error();
+		}
+		
+		int total;
+		try {
+			total = sqlSession.selectOne("UserMapper.totalPriceOfUserLike", uid);
+		}catch(Exception e){
+			total = 0;
+		}
+		
+		Response response = Response.success();
+		response.setTotal(total);;
+		return response;
+	}
+
+	
+	@RequestMapping(value="/tpWrite/{uid}", method=RequestMethod.GET)
+	public Response sumPriceWhenWrite(@PathVariable("uid") int uid) {
+		if(uid < STARTING_COUNT){
+			return Response.error();
+		}
+		
+		int total;
+		try {
+			total = sqlSession.selectOne("UserMapper.totalPriceOfUserWrite", uid);
+		}catch(Exception e){
+			total = 0;
+		}
+		
+		Response response = Response.success();
+		response.setTotal(total);;
+		return response;
+	}
+	
 	
 	@ExceptionHandler(value={ NestedServletException.class, IllegalArgumentException.class})
 	public ModelAndView exceptionHandler(Exception e) {

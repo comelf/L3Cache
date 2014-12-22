@@ -31,5 +31,18 @@
 		update L3_USERS set email=#{email}, password=password(#{password}) where user_id =#{uid}
 	</update>
 	
+	<select id="totalPriceOfUserLike" resultType="int">
+		select 	sum(P.price) from L3_POSTS AS P
+			LEFT JOIN LIKE_POSTS AS L 
+				ON P.post_id = L.L3_POSTS_post_id 
+				where L.L3_USERS_user_id=#{uid} group by L.L3_USERS_user_id
+	</select>
+	
+	<select id="totalPriceOfUserWrite" resultType="int">
+		select 	sum(price) from L3_POSTS
+			where write_user_id=#{uid} group by write_user_id
+	</select>
+		
+	
 	
 </mapper>
