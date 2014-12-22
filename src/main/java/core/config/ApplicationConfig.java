@@ -89,6 +89,12 @@ public class ApplicationConfig {
 		ds.setUrl(env.getRequiredProperty("mysql.url"));
 		ds.setUsername(env.getRequiredProperty("mysql.username"));
 		ds.setPassword(env.getRequiredProperty("mysql.password"));
+		ds.setInitialSize(10);
+		ds.setMaxActive(100);
+		ds.setMaxWait(10000);
+		ds.setMinIdle(10);
+		ds.setValidationQuery("SELECT 1;");
+		
 		
 		return ds;
 	}
