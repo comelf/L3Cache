@@ -137,7 +137,7 @@
 			ON P.post_id = L.L3_POSTS_post_id where U.user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20
 	</select>
 	
-	<select id="countUserPostsList" resultType="int">
+	<select id="countUserPostsList" resultType="long">
 		select count(*) from L3_POSTS where write_user_id= #{uid}
 	</select>
 	
@@ -160,8 +160,10 @@
 			ON P.post_id = L.L3_POSTS_post_id where L.L3_USERS_user_id = #{uid} group by P.post_id order by P.writeDate DESC,P.post_id DESC LIMIT #{start},20	
 	</select>
 	
-	<select id="countUserLikesList" resultType="int">
+	<select id="countUserLikesList" resultType="long">
 		select count(*) from LIKE_POSTS where L3_USERS_user_id = #{uid}
 	</select>
+	
+
 	
 </mapper>

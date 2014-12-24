@@ -103,7 +103,7 @@ public class PostManager {
 		return sqlSession.selectList("PostMapper.selectUserPostsList", postSel);
 	}
 
-	public int getUserPostsCount(int uid) {
+	public long getUserPostsCount(int uid) {
 		return sqlSession.selectOne("PostMapper.countUserPostsList", uid);
 	}
 
