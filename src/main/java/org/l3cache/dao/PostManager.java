@@ -107,7 +107,7 @@ public class PostManager {
 		return sqlSession.selectOne("PostMapper.countUserPostsList", uid);
 	}
 
-	public int getUserLikesCount(int uid) {
+	public long getUserLikesCount(int uid) {
 		return sqlSession.selectOne("PostMapper.countUserLikesList", uid);
 	}
 

@@ -128,6 +128,7 @@ public class MobileUsersController {
 		try {
 			total = sqlSession.selectOne("UserMapper.totalPriceOfUserLike", uid);
 		}catch(Exception e){
+			LOG.debug("total price of Like : {}", e.getMessage());
 			total = 0;
 		}
 		
@@ -147,6 +148,7 @@ public class MobileUsersController {
 		try {
 			total = sqlSession.selectOne("UserMapper.totalPriceOfUserWrite", uid);
 		}catch(Exception e){
+			LOG.debug("total price of Writer : {}", e.getMessage());
 			total = 0;
 		}
 		
