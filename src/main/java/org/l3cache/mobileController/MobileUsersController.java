@@ -151,7 +151,7 @@ public class MobileUsersController {
 			LOG.debug("total price of Writer : {}", e.getMessage());
 			total = 0;
 		}
-		
+		LOG.debug("[return]total price of Writer = {}", total );
 		Response response = Response.success();
 		response.setTotal(total);;
 		return response;
