@@ -92,7 +92,11 @@ public class PostManager {
 	public void readPost(long pid) {
 		sqlSession.update("PostMapper.readPost", pid);
 	}
-
+	
+	public long getPopularRows() {
+		return sqlSession.selectOne("PostMapper.foundPopularPows");
+	}
+	
 	public int getTotalRows() {
 		return sqlSession.selectOne("PostMapper.foundRows");
 	}
@@ -153,7 +157,7 @@ public class PostManager {
 		PostSel postSel = new PostSel(start, uid);
 		
 		Response response = Response.success();
-		response.setTotal(getTotalRows());
+		response.setTotal(getPopularRows());
 		response.setData(sqlSession.selectList("PostMapper.selectPopularList", postSel));
 		return response;
 	}

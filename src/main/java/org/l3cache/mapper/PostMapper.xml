@@ -66,6 +66,9 @@
 			where P.writeDate  > (CURRENT_DATE()-INTERVAL 7 DAY) group by P.post_id order by P.post_read DESC, P.writeDate DESC, P.post_id DESC LIMIT #{start},20	
 	</select>
 	
+	<select id="foundPopularPows" resultType="long">
+		select count(*) from L3_POSTS where where writeDate  > (CURRENT_DATE()-INTERVAL 7 DAY)
+	</select>
 	
 	<insert id="create">
 		insert into L3_POSTS (title,shopUrl,contents,imgUrl,price,write_user_id) values(#{title},#{shopUrl} ,#{contents},#{imgUrl},#{price},#{writer})
