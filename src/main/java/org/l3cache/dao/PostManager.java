@@ -127,10 +127,11 @@ public class PostManager {
 			return Response.arguemntError();
 		}
 		
-		
-		
 		switch (sort) {
 		case RECOMMENDATION_LISTS:
+			if(start>1){
+				return Response.resultZero();
+			}
 			return getRecommendedLists(id);
 		case RECENT_LISTS:
 			return getRecentlyLists(start, id);
