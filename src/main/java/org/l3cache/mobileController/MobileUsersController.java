@@ -29,14 +29,14 @@ public class MobileUsersController {
 	@Autowired
 	SqlSession sqlSession;
 
-	@RequestMapping(value="/new", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value="/new", method = RequestMethod.POST)
 	public Status newUser(@RequestParam(value = "email") String email,
 						  @RequestParam(value = "password") String password) {
 		
 		if(sqlSession.selectOne("UserMapper.findByEmail", email) != null){
 			return Status.emailDuplication();
 		}
-
+		
 		User user = new User(email, password);
 		sqlSession.insert("UserMapper.create", user);
 		return Status.success();
@@ -124,10 +124,11 @@ public class MobileUsersController {
 			return Response.error();
 		}
 		
-		int total;
+		long total;
 		try {
 			total = sqlSession.selectOne("UserMapper.totalPriceOfUserLike", uid);
 		}catch(Exception e){
+			LOG.debug("total price of Like : {}", e.getMessage());
 			total = 0;
 		}
 		
@@ -143,13 +144,14 @@ public class MobileUsersController {
 			return Response.error();
 		}
 		
-		int total;
+		long total;
 		try {
 			total = sqlSession.selectOne("UserMapper.totalPriceOfUserWrite", uid);
 		}catch(Exception e){
+			LOG.debug("total price of Writer : {}", e.getMessage());
 			total = 0;
 		}
-		
+		LOG.debug("[return]total price of Writer = {}", total );
 		Response response = Response.success();
 		response.setTotal(total);;
 		return response;

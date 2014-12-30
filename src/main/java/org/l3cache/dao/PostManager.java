@@ -92,7 +92,11 @@ public class PostManager {
 	public void readPost(long pid) {
 		sqlSession.update("PostMapper.readPost", pid);
 	}
-
+	
+	public long getPopularRows() {
+		return sqlSession.selectOne("PostMapper.foundPopularPows");
+	}
+	
 	public int getTotalRows() {
 		return sqlSession.selectOne("PostMapper.foundRows");
 	}
@@ -103,11 +107,11 @@ public class PostManager {
 		return sqlSession.selectList("PostMapper.selectUserPostsList", postSel);
 	}
 
-	public int getUserPostsCount(int uid) {
+	public long getUserPostsCount(int uid) {
 		return sqlSession.selectOne("PostMapper.countUserPostsList", uid);
 	}
 
-	public int getUserLikesCount(int uid) {
+	public long getUserLikesCount(int uid) {
 		return sqlSession.selectOne("PostMapper.countUserLikesList", uid);
 	}
 
@@ -123,10 +127,11 @@ public class PostManager {
 			return Response.arguemntError();
 		}
 		
-		
-		
 		switch (sort) {
 		case RECOMMENDATION_LISTS:
+			if(start>1){
+				return Response.resultZero();
+			}
 			return getRecommendedLists(id);
 		case RECENT_LISTS:
 			return getRecentlyLists(start, id);
@@ -153,7 +158,7 @@ public class PostManager {
 		PostSel postSel = new PostSel(start, uid);
 		
 		Response response = Response.success();
-		response.setTotal(getTotalRows());
+		response.setTotal(getPopularRows());
 		response.setData(sqlSession.selectList("PostMapper.selectPopularList", postSel));
 		return response;
 	}

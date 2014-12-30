@@ -5,7 +5,7 @@ import core.utils.ResultCode;
 public class Response {
 	private int result;
 	private String message;
-	private int total;
+	private long total;
 	private Object data;
 	
 	public Response (int result) {
@@ -36,11 +36,11 @@ public class Response {
 		this.data = data;
 	}
 
-	public int getTotal() {
+	public long getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(long total) {
 		this.total = total;
 	}
 	
